@@ -45,7 +45,11 @@ export function App() {
   }, []);
 
   // autosave after every change, once the restore question was answered
-  useEffect(() => { if (decided) saveDraft(a); }, [a, decided]);
+  useEffect(() => {
+    if (!decided) return;
+    const pristine = !a.title && a.states.length <= 1 && a.transitions.length === 0 && !a.task;
+    if (pristine) deleteDraft(); else saveDraft(a); // an untouched blank automaton is not worth offering back
+  }, [a, decided]);
 
   const task = a.task;
   const student = !!task && !teacher;
@@ -148,8 +152,8 @@ export function App() {
           <details class="menu" style={{ position: "relative" }}>
             <summary class="btn btn-sm" style={{ listStyle: "none" }}>ייצוא ציור</summary>
             <div class="pop" style={{ top: "40px", left: 0, minWidth: "160px" }}>
-              <button type="button" class="btn btn-sm" onClick={() => exportImage("svg")}>SVG</button>
-              <button type="button" class="btn btn-sm" onClick={() => exportImage("png")}>PNG</button>
+              <button type="button" class="btn btn-sm" onClick={e => { (e.currentTarget as HTMLElement).closest("details")!.open = false; exportImage("svg"); }}>SVG</button>
+              <button type="button" class="btn btn-sm" onClick={e => { (e.currentTarget as HTMLElement).closest("details")!.open = false; exportImage("png"); }}>PNG</button>
             </div>
           </details>
           <button type="button" class={`btn btn-sm${teacher ? " btn-primary" : ""}`} aria-pressed={teacher} onClick={() => { setTeacher(t => !t); if (!teacher) setView("task"); }}>

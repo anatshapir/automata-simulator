@@ -6,7 +6,6 @@ import { parseWord, showWord } from "../engine/word.js";
 /** Run state lives outside the automaton (spec 5.2): a word, a precomputed run, and a cursor over its steps. */
 export function useRunner(a: Automaton, runnable: boolean) {
   const [text, setTextRaw] = useState("");
-  const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(900);
 
@@ -14,8 +13,12 @@ export function useRunner(a: Automaton, runnable: boolean) {
   const r: Run | null = useMemo(() => (runnable && !parsed.issue ? run(a, parsed.word) : null), [a, runnable, parsed]);
   const last = r ? r.steps.length - 1 : 0;
 
-  // Changing the word (or the automaton) cancels the run.
-  useEffect(() => { setStep(0); setPlaying(false); }, [r]);
+  // The cursor belongs to one run: changing the word (or the automaton) cancels the run at once.
+  const [cursor, setCursor] = useState<{ run: Run | null; step: number }>({ run: null, step: 0 });
+  const step = cursor.run === r ? cursor.step : 0;
+  const setStep = (f: number | ((s: number) => number)) =>
+    setCursor(c => ({ run: r, step: typeof f === "function" ? f(c.run === r ? c.step : 0) : f }));
+  useEffect(() => { setPlaying(false); }, [r]);
 
   useEffect(() => {
     if (!playing) return;

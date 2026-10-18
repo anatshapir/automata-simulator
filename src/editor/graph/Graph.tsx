@@ -51,19 +51,20 @@ export function Graph(p: Props) {
   if (p.minScreenFont && px) {
     // the drawing's padding grows with the scale, so settle the scale in a few rounds
     for (let i = 0; i < 4; i++) {
-      const b0 = bounds(p.a, 80 * scale);
+      const b0 = bounds(p.a, 80 * Math.min(scale, 1.3));
       const ratio = Math.min(px.w / b0.w, px.h / b0.h);
-      scale = Math.max(p.scale ?? 1, Math.min(2.6, p.minScreenFont / 17 / ratio));
+      scale = Math.max(p.scale ?? 1, Math.min(3.2, p.minScreenFont / 17 / ratio));
     }
   }
-  const r = R * scale;
+  const gs = Math.min(scale, 1.6); // geometry grows less than text, so states do not collide
+  const r = R * gs;
   const drag = useRef<{ id: string; dx: number; dy: number; moved: boolean } | null>(null);
   const [frozen, setFrozen] = useState<ReturnType<typeof bounds> | null>(null);
   const [edgeFrom, setEdgeFrom] = useState<string | null>(null);
   const [hover, setHover] = useState<{ x: number; y: number } | null>(null);
 
-  const box = frozen ?? bounds(p.a, 80 * scale);
-  const shapes = useMemo(() => edgeShapes(p.a, scale), [p.a, scale]);
+  const box = frozen ?? bounds(p.a, 80 * Math.min(scale, 1.3));
+  const shapes = useMemo(() => edgeShapes(p.a, gs), [p.a, gs]);
   const traps = useMemo(() => new Set(trapLikeStates(p.a)), [p.a]);
   const accepting = new Set(p.a.acceptingStateIds);
   const h = p.highlight ?? {};
@@ -101,7 +102,7 @@ export function Graph(p: Props) {
     const q = toSvg(e);
     drag.current = { id, dx: q.x - s.x, dy: q.y - s.y, moved: false };
     setFrozen(box);
-    (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
+    try { (e.currentTarget as Element).setPointerCapture?.(e.pointerId); } catch { /* synthetic events */ }
     p.onSelectState?.(id);
   };
   const move = (e: PointerEvent) => {
@@ -146,7 +147,7 @@ export function Graph(p: Props) {
           </marker>
         ))}
       </defs>
-      {start && <path class="g-start" d={`M${start.x - r - 44 * scale} ${start.y}H${start.x - r - 3}`} marker-end={`url(#${uid}-k)`} />}
+      {start && <path class="g-start" d={`M${start.x - r - 44 * gs} ${start.y}H${start.x - r - 3}`} marker-end={`url(#${uid}-k)`} />}
       {shapes.map(s => {
         const active = h.activeEdges?.has(s.key);
         const onpath = !active && h.pathEdges?.has(s.key);
@@ -173,11 +174,11 @@ export function Graph(p: Props) {
         const onpath = !cur && h.pathStates?.has(s.id);
         const cls = ["g-state", traps.has(s.id) && "trap", stuck ? "stuck" : cur ? "cur" : onpath ? "onpath" : "",
           h.errStates?.has(s.id) && !cur && "err", (p.selectedState === s.id || edgeFrom === s.id) && "sel"].filter(Boolean).join(" ");
-        const fs = Math.min(17 * scale, (2 * r - 10) / Math.max(2, [...s.label].length) * 1.7);
+        const fs = Math.min(17 * scale, (2 * r - 8) / Math.max(2, [...s.label].length) * 1.75);
         return (
           <g class={cls} key={s.id} onPointerDown={e => downState(e as PointerEvent, s.id)} style={{ cursor: p.editable ? (tool === "edge" ? "pointer" : "grab") : "default" }}>
             <circle class="body" cx={s.x} cy={s.y} r={r} />
-            {accepting.has(s.id) && <circle class="ring" cx={s.x} cy={s.y} r={r - 5 * scale} />}
+            {accepting.has(s.id) && <circle class="ring" cx={s.x} cy={s.y} r={r - 5 * gs} />}
             <text x={s.x} y={s.y + fs * 0.36} text-anchor="middle" style={{ fontSize: `${fs}px` }}>{s.label}</text>
             {h.errStates?.has(s.id) && (
               <g class="badge"><circle cx={s.x + r * 0.75} cy={s.y - r * 0.75} r={10} /><text x={s.x + r * 0.75} y={s.y - r * 0.75 + 4.5} text-anchor="middle">!</text></g>

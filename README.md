@@ -27,6 +27,13 @@ npm run build   # אתר סטטי בתיקייה dist
 
 כל דחיפה ל-`main` מריצה את הבדיקות ומפרסמת ל-GitHub Pages.
 
+בדיקות הקבלה של הממשק (צריך Python עם Playwright):
+
+```bash
+npm run build && npx vite preview --port 4173 &
+python3 tests/ui/ui_acceptance.py http://127.0.0.1:4173/
+```
+
 ## מבנה
 
 | תיקייה | תוכן |

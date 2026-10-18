@@ -76,15 +76,15 @@ textarea.input { min-height: 72px; resize: vertical; line-height: 1.5; }
 
 /* ---------- task banner */
 .banner { margin: 16px 20px 0; padding: 14px 18px; background: var(--blue-soft); border: 1px solid #C5D4F5; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; }
-.banner .what { font-size: 13px; font-weight: 600; color: var(--blue-ink); }
+.banner .what { font-size: 14px; font-weight: 600; color: var(--blue-ink); }
 .banner .prompt { font-size: 18px; line-height: 1.55; white-space: pre-wrap; }
-.lock { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); background: #EEF1F5; border-radius: 999px; padding: 3px 10px; }
+.lock { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); background: #EEF1F5; border-radius: 999px; padding: 3px 10px; }
 
 /* ---------- canvas */
 .canvas { position: relative; height: 430px; background-color: #FBFCFD; background-image: radial-gradient(#DDE2E9 1px, transparent 1px); background-size: 22px 22px; border-radius: 12px; overflow: hidden; touch-action: none; }
 .canvas svg { width: 100%; height: 100%; display: block; user-select: none; }
 .canvas-tools { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; flex-wrap: wrap; direction: rtl; }
-.canvas-hint { position: absolute; bottom: 8px; right: 12px; font-size: 13px; color: var(--muted); background: rgba(255,255,255,.9); padding: 2px 8px; border-radius: 6px; }
+.canvas-hint { position: absolute; bottom: 8px; right: 12px; font-size: 14px; color: var(--muted); background: rgba(255,255,255,.9); padding: 2px 8px; border-radius: 6px; }
 .g-state circle.body { fill: #fff; stroke: var(--ink); stroke-width: 2; }
 .g-state.trap circle.body { fill: var(--trap); }
 .g-state.sel circle.body { stroke: var(--blue); stroke-width: 3; }
@@ -95,7 +95,7 @@ textarea.input { min-height: 72px; resize: vertical; line-height: 1.5; }
 .g-state circle.ring { fill: none; stroke: var(--ink); stroke-width: 2; }
 .g-state text { font-family: var(--mono); font-weight: 600; fill: var(--ink); font-size: 17px; }
 .g-state .badge circle { fill: var(--red); }
-.g-state .badge text { fill: #fff; font-family: var(--ui); font-size: 13px; font-weight: 700; }
+.g-state .badge text { fill: #fff; font-family: var(--ui); font-size: 14px; font-weight: 700; }
 .g-edge path { fill: none; stroke: var(--ink); stroke-width: 1.8; }
 .g-edge.active path { stroke: var(--orange); stroke-width: 4.5; }
 .g-edge.onpath path { stroke: var(--blue); stroke-width: 3.5; }
@@ -134,7 +134,7 @@ table.delta select:hover, table.delta input:hover, table.delta select:focus, tab
 .issue { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; font-size: 15px; line-height: 1.5; }
 .issue.error { background: var(--red-soft); border: 1px solid #F0C5BE; }
 .issue.warning { background: var(--warn-soft); border: 1px solid #F3D3A6; }
-.issue .code { font-family: var(--mono); font-size: 12px; font-weight: 600; padding: 1px 6px; border-radius: 5px; white-space: nowrap; }
+.issue .code { font-family: var(--mono); font-size: 14px; font-weight: 600; padding: 1px 6px; border-radius: 5px; white-space: nowrap; }
 .issue.error .code { background: #F5D3CD; color: var(--red-ink); }
 .issue.warning .code { background: #FBE3C0; color: var(--warn-ink); }
 .ok-line { display: flex; align-items: center; gap: 8px; color: var(--green); font-weight: 500; }
@@ -185,14 +185,14 @@ table.delta select:hover, table.delta input:hover, table.delta select:focus, tab
 .tree-node.cur circle { stroke: var(--orange); stroke-width: 4; fill: var(--orange-soft); }
 .tree-edge { stroke: #8A94A3; stroke-width: 1.6; fill: none; }
 .tree-edge.acc { stroke: var(--blue); stroke-width: 3.5; }
-.tree-tag { font-family: var(--ui); font-size: 13px; font-weight: 500; }
+.tree-tag { font-family: var(--ui); font-size: 14px; font-weight: 500; }
 
 /* ---------- tools */
 .tool-out { font-size: 14px; background: var(--bg); border-radius: 8px; padding: 8px 10px; line-height: 1.6; }
 .tool-out .mono { direction: ltr; unicode-bidi: isolate; }
 .check-item { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; }
 .check-box { width: 18px; height: 18px; border-radius: 4px; border: 2px solid #8A94A3; flex: none; margin-top: 2px; display: flex; align-items: center; justify-content: center; }
-.check-box.on { background: var(--green); border-color: var(--green); color: #fff; font-size: 12px; }
+.check-box.on { background: var(--green); border-color: var(--green); color: #fff; font-size: 14px; }
 
 /* ---------- dialog */
 .overlay { position: fixed; inset: 0; background: rgba(23,32,51,.35); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px; }

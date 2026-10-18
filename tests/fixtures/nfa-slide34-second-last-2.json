@@ -1,0 +1,263 @@
+{
+  "fixtureId": "nfa-slide34-second-last-2",
+  "source": {
+    "material": "מצגת אס״ד לא מלא וא״ס לא דטרמיניסטי",
+    "location": "שקף 34",
+    "status": "verified-visual"
+  },
+  "language": {
+    "description": "מילים מעל {1,2,3} שבהן האות לפני האחרונה היא 2",
+    "bruteForceCheckedUpToLength": 8,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "verified-visual",
+    "languageBruteForceUpToLength": 8,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "א״ס: האות לפני האחרונה היא 2",
+    "alphabet": [
+      "1",
+      "2",
+      "3"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "נקרא 2 שאולי לפני האחרון"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "2 היה לפני האחרון"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s2"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "2",
+        "to": "s0"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "3",
+        "to": "s0"
+      },
+      {
+        "id": "t3",
+        "from": "s0",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "1",
+        "to": "s2"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "2",
+        "to": "s2"
+      },
+      {
+        "id": "t6",
+        "from": "s1",
+        "symbol": "3",
+        "to": "s2"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "2",
+        "1"
+      ],
+      [
+        "2",
+        "2"
+      ],
+      [
+        "2",
+        "3"
+      ]
+    ],
+    "counts": {
+      "states": 3,
+      "transitions": 7,
+      "selfLoops": 3
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "1",
+          "2",
+          "2",
+          "1"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q1",
+            "q2"
+          ],
+          [
+            "q0",
+            "q2"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q0",
+          "q0",
+          "q1",
+          "q2"
+        ],
+        "tree": {
+          "totalLeaves": 3,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 1,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "2",
+          "1",
+          "2"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q1"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 3,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 2,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "2"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 2,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

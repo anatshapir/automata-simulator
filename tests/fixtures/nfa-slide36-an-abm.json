@@ -1,0 +1,411 @@
+{
+  "fixtureId": "nfa-slide36-an-abm",
+  "source": {
+    "material": "מצגת אס״ד לא מלא וא״ס לא דטרמיניסטי",
+    "location": "שקף 36",
+    "status": "verified-visual",
+    "note": "בשקף: המילה הקצרה ε והבאה אחריה a"
+  },
+  "language": {
+    "description": "L = { aⁿ(ab)ᵐ | n,m ≥ 0 }",
+    "bruteForceCheckedUpToLength": 10,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "verified-visual",
+    "languageBruteForceUpToLength": 10,
+    "statedRunsCheckedAgainstEngine": 2,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "א״ס: aⁿ(ab)ᵐ",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "מילה ריקה"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "רצף a בלבד"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "מחכה ל-b של ab"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "הסתיים ab"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s0",
+      "s1",
+      "s3"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t4",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t5",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s2"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": true,
+    "shortestAcceptedWords": [
+      []
+    ],
+    "counts": {
+      "states": 4,
+      "transitions": 6,
+      "selfLoops": 1
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [],
+        "statedInSource": true,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0"
+        ],
+        "tree": {
+          "totalLeaves": 1,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 0,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1"
+        ],
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 1,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q3"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q2",
+          "q3"
+        ],
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 0,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q3"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1",
+          "q2",
+          "q3"
+        ],
+        "tree": {
+          "totalLeaves": 3,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 0,
+            "stuck": 2
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q3"
+          ],
+          [
+            "q2"
+          ],
+          [
+            "q3"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q2",
+          "q3",
+          "q2",
+          "q3"
+        ],
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 0,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q3"
+          ],
+          [
+            "q2"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 1,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          []
+        ],
+        "emptyAtIndex": 0,
+        "unreadSymbols": [
+          "a"
+        ],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 1,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

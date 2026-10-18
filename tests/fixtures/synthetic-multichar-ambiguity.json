@@ -1,0 +1,150 @@
+{
+  "fixtureId": "synthetic-multichar-ambiguity",
+  "source": {
+    "material": "סינתטי",
+    "location": "AC על בחירת רצף סמלים מפורש",
+    "status": "synthetic"
+  },
+  "language": {
+    "description": "מילים שמכילות את הסמל ab",
+    "bruteForceCheckedUpToLength": 5,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "synthetic",
+    "languageBruteForceUpToLength": 5,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "סמל מרובה-תווים: [ab] מול [a,b]",
+    "alphabet": [
+      "a",
+      "b",
+      "ab"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא נקרא הסמל ab"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "נקרא הסמל ab"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s1"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "ab",
+        "to": "s1"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s1"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "ab",
+        "to": "s1"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "ab"
+      ]
+    ],
+    "counts": {
+      "states": 2,
+      "transitions": 6,
+      "selfLoops": 5
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "ab"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q0",
+          "q0"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "b",
+          "a",
+          "ab"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q0",
+          "q0",
+          "q1"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

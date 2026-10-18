@@ -1,0 +1,199 @@
+{
+  "fixtureId": "sheet-ex06-elevator-emergency",
+  "source": {
+    "material": "דף תרגילים לשיעורי בית: מבוא למודלים חישוביים",
+    "location": "תרגיל 6 ★",
+    "status": "stated-in-source",
+    "note": "הסמל עצירה הוא סמל מרובה-תווים; ספירת 16 בפתרון היא ספירת מעברים (שלשות)"
+  },
+  "language": {
+    "description": "תיאור מערכת, ללא שפה",
+    "bruteForceCheckedUpToLength": null,
+    "mismatches": null
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": null,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "מעלית עם עצירת חירום",
+    "alphabet": [
+      "1",
+      "2",
+      "3",
+      "עצירה"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "קומה 1",
+        "x": 80,
+        "y": 100,
+        "memory": "המעלית בקומה 1"
+      },
+      {
+        "id": "s1",
+        "label": "קומה 2",
+        "x": 230,
+        "y": 100,
+        "memory": "המעלית בקומה 2"
+      },
+      {
+        "id": "s2",
+        "label": "קומה 3",
+        "x": 380,
+        "y": 100,
+        "memory": "המעלית בקומה 3"
+      },
+      {
+        "id": "s3",
+        "label": "עצורה",
+        "x": 530,
+        "y": 100,
+        "memory": "נלחץ לחצן עצירת חירום"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "3",
+        "to": "s2"
+      },
+      {
+        "id": "t3",
+        "from": "s0",
+        "symbol": "עצירה",
+        "to": "s3"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t6",
+        "from": "s1",
+        "symbol": "3",
+        "to": "s2"
+      },
+      {
+        "id": "t7",
+        "from": "s1",
+        "symbol": "עצירה",
+        "to": "s3"
+      },
+      {
+        "id": "t8",
+        "from": "s2",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t9",
+        "from": "s2",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t10",
+        "from": "s2",
+        "symbol": "3",
+        "to": "s2"
+      },
+      {
+        "id": "t11",
+        "from": "s2",
+        "symbol": "עצירה",
+        "to": "s3"
+      },
+      {
+        "id": "t12",
+        "from": "s3",
+        "symbol": "1",
+        "to": "s3"
+      },
+      {
+        "id": "t13",
+        "from": "s3",
+        "symbol": "2",
+        "to": "s3"
+      },
+      {
+        "id": "t14",
+        "from": "s3",
+        "symbol": "3",
+        "to": "s3"
+      },
+      {
+        "id": "t15",
+        "from": "s3",
+        "symbol": "עצירה",
+        "to": "s3"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [],
+    "counts": {
+      "states": 4,
+      "transitions": 16,
+      "selfLoops": 7
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "קומה 1",
+      "קומה 2",
+      "קומה 3",
+      "עצורה"
+    ],
+    "trapStates": [
+      "עצורה"
+    ],
+    "runs": [
+      {
+        "word": [
+          "2",
+          "עצירה",
+          "1"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "קומה 1",
+          "קומה 2",
+          "עצורה",
+          "עצורה"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

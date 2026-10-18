@@ -1,0 +1,215 @@
+{
+  "fixtureId": "sheet-ex07",
+  "source": {
+    "material": "דף תרגילים לשיעורי בית: מבוא למודלים חישוביים",
+    "location": "תרגיל 7 + פתרון",
+    "status": "stated-in-source"
+  },
+  "language": {
+    "description": "מילים שמתחילות ב-a ואורכן זוגי",
+    "bruteForceCheckedUpToLength": 10,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": 10,
+    "statedRunsCheckedAgainstEngine": 5,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "מטבלת מעברים לאוטומט",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא נקרא תו"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "התחילה ב-a, אורך אי-זוגי"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "התחילה ב-a, אורך זוגי"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "התחילה ב-b (מלכודת)"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s2"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s2"
+      },
+      {
+        "id": "t4",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t5",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s1"
+      },
+      {
+        "id": "t6",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s3"
+      },
+      {
+        "id": "t7",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s3"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "a"
+      ],
+      [
+        "a",
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 4,
+      "transitions": 8,
+      "selfLoops": 2
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "q3"
+    ],
+    "trapStates": [
+      "q3"
+    ],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "b",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q1",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "b",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q3",
+          "q3"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q1"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

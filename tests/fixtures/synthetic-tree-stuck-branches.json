@@ -1,0 +1,409 @@
+{
+  "fixtureId": "synthetic-tree-stuck-branches",
+  "source": {
+    "material": "סינתטי",
+    "location": "כלל צמצום העץ + ענפים שנתקעו",
+    "status": "synthetic",
+    "note": "a^16 b: 17 עלים, 1 מקבל ו-16 נתקעו. a^17: 18 עלים, אף אחד לא מקבל"
+  },
+  "language": {
+    "description": "aⁿb, n ≥ 0",
+    "bruteForceCheckedUpToLength": 8,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "synthetic",
+    "languageBruteForceUpToLength": 8,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "עץ חישוב: ענף מקבל יחיד בין ענפים שנתקעו, וענפים ללא מקבל",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "מחכה ל-b"
+      },
+      {
+        "id": "s1",
+        "label": "qx",
+        "x": 230,
+        "y": 100,
+        "memory": "ענף ללא המשך ב-b"
+      },
+      {
+        "id": "s2",
+        "label": "qf",
+        "x": 380,
+        "y": 100,
+        "memory": "נקרא b אחרי a-ים"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s2"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t3",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s2"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 3,
+      "transitions": 4,
+      "selfLoops": 2
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "qx"
+    ],
+    "trapStates": [
+      "qx"
+    ],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "qf"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "q0",
+          "qf"
+        ],
+        "tree": {
+          "totalLeaves": 17,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 0,
+            "stuck": 16
+          },
+          "displayRule": "acceptingOnly",
+          "shownAcceptingPaths": [
+            [
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "q0",
+              "qf"
+            ]
+          ],
+          "hidden": {
+            "total": 16,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 16
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ],
+          [
+            "q0",
+            "qx"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 18,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 18,
+            "stuck": 0
+          },
+          "displayRule": "acceptingOnly",
+          "shownAcceptingPaths": [],
+          "hidden": {
+            "total": 18,
+            "accepting": 0,
+            "rejecting": 18,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "qf"
+          ],
+          []
+        ],
+        "emptyAtIndex": 1,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 1,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

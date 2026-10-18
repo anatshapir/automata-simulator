@@ -1,0 +1,281 @@
+{
+  "fixtureId": "nfa-slide28-ends-bab",
+  "source": {
+    "material": "מצגת אס״ד לא מלא וא״ס לא דטרמיניסטי",
+    "location": "שקף 28",
+    "status": "verified-visual",
+    "note": "בשקף הלולאה על q0 מסומנת a,b,c אבל השאלה מגדירה Σ={a,b}; ה-fixture לפי השאלה"
+  },
+  "language": {
+    "description": "מילים מעל {a,b} שמסתיימות ב-bab",
+    "bruteForceCheckedUpToLength": 10,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "verified-visual",
+    "languageBruteForceUpToLength": 10,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "א״ס: מסתיימות ב-bab",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "קורא את תחילת המילה"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "נקרא b ראשון של bab"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "נקרא ba"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "המילה מסתיימת ב-bab"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s3"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s1"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t4",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s3"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "b",
+        "a",
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 4,
+      "transitions": 5,
+      "selfLoops": 2
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "b",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q1",
+            "q3"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1",
+          "q2",
+          "q3"
+        ],
+        "tree": {
+          "totalLeaves": 3,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 2,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "a",
+          "b",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q1",
+            "q3"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q1",
+            "q3"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q0",
+          "q0",
+          "q1",
+          "q2",
+          "q3"
+        ],
+        "tree": {
+          "totalLeaves": 4,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 2,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "a",
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q1",
+            "q3"
+          ],
+          [
+            "q0",
+            "q2"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 3,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 2,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,290 @@
+{
+  "fixtureId": "intro-beads-hebrew",
+  "source": {
+    "material": "מצגת מבוא לחישוביות (55 שקפים)",
+    "location": "שקפים 49-50 (משימה 7)",
+    "status": "stated-in-source",
+    "note": "סמלי האלפבית באותיות עבריות; סרט הקלט מוצג משמאל לימין"
+  },
+  "language": {
+    "description": "לפחות חרוז אחד, ואין שני חרוזים צמודים באותו צבע",
+    "bruteForceCheckedUpToLength": 7,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": 7,
+    "statedRunsCheckedAgainstEngine": 6,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "שרשרת חרוזים בשלושה צבעים",
+    "alphabet": [
+      "כ",
+      "א",
+      "ב"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד אין חרוזים"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "החרוז האחרון כהה"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "החרוז האחרון אמבר"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "החרוז האחרון בהיר"
+      },
+      {
+        "id": "s4",
+        "label": "q4",
+        "x": 680,
+        "y": 100,
+        "memory": "שני חרוזים צמודים באותו צבע"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s1",
+      "s2",
+      "s3"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "כ",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "א",
+        "to": "s2"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "ב",
+        "to": "s3"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "כ",
+        "to": "s4"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "א",
+        "to": "s2"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "ב",
+        "to": "s3"
+      },
+      {
+        "id": "t6",
+        "from": "s2",
+        "symbol": "כ",
+        "to": "s1"
+      },
+      {
+        "id": "t7",
+        "from": "s2",
+        "symbol": "א",
+        "to": "s4"
+      },
+      {
+        "id": "t8",
+        "from": "s2",
+        "symbol": "ב",
+        "to": "s3"
+      },
+      {
+        "id": "t9",
+        "from": "s3",
+        "symbol": "כ",
+        "to": "s1"
+      },
+      {
+        "id": "t10",
+        "from": "s3",
+        "symbol": "א",
+        "to": "s2"
+      },
+      {
+        "id": "t11",
+        "from": "s3",
+        "symbol": "ב",
+        "to": "s4"
+      },
+      {
+        "id": "t12",
+        "from": "s4",
+        "symbol": "כ",
+        "to": "s4"
+      },
+      {
+        "id": "t13",
+        "from": "s4",
+        "symbol": "א",
+        "to": "s4"
+      },
+      {
+        "id": "t14",
+        "from": "s4",
+        "symbol": "ב",
+        "to": "s4"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "כ"
+      ],
+      [
+        "א"
+      ],
+      [
+        "ב"
+      ]
+    ],
+    "counts": {
+      "states": 5,
+      "transitions": 15,
+      "selfLoops": 3
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "q4"
+    ],
+    "trapStates": [
+      "q4"
+    ],
+    "runs": [
+      {
+        "word": [
+          "א"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "כ",
+          "א",
+          "ב"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q3"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "א",
+          "כ",
+          "א",
+          "ב",
+          "כ",
+          "א"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q2",
+          "q1",
+          "q2",
+          "q3",
+          "q1",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "כ",
+          "ב",
+          "ב"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q3",
+          "q4"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "כ",
+          "כ",
+          "א"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q4",
+          "q4"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

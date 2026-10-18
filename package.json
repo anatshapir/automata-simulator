@@ -1,0 +1,23 @@
+{
+  "name": "automata-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.9.3",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.9"
+  },
+  "dependencies": {
+    "preact": "^10.25.4"
+  }
+}

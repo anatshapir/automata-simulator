@@ -1,0 +1,197 @@
+{
+  "fixtureId": "partial-starts-with-ab",
+  "source": {
+    "material": "מצגת אס״ד לא מלא וא״ס לא דטרמיניסטי",
+    "location": "שקפים 5-6 (טבלאות מלא ולא מלא)",
+    "status": "stated-in-source"
+  },
+  "language": {
+    "description": "כל המילים מעל {a,b} שמתחילות ב-ab",
+    "bruteForceCheckedUpToLength": 10,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": 10,
+    "statedRunsCheckedAgainstEngine": 1,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-partial",
+    "title": "אס״ד לא מלא: מתחילה ב-ab",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא נקרא תו"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "התחילה ב-a, מחכה ל-b"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "התחילה ב-ab"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s2"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s2"
+      },
+      {
+        "id": "t2",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t3",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s2"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 3,
+      "transitions": 4,
+      "selfLoops": 2
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "b",
+          "b",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q2",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "q0"
+        ],
+        "stuck": {
+          "atIndex": 0,
+          "state": "q0",
+          "symbol": "b"
+        },
+        "unreadSymbols": [
+          "b",
+          "a"
+        ]
+      },
+      {
+        "word": [
+          "a",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1"
+        ],
+        "stuck": {
+          "atIndex": 1,
+          "state": "q1",
+          "symbol": "a"
+        },
+        "unreadSymbols": [
+          "a"
+        ]
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1"
+        ],
+        "stuck": {
+          "atIndex": 1,
+          "state": "q1",
+          "symbol": "a"
+        },
+        "unreadSymbols": [
+          "a",
+          "b"
+        ]
+      }
+    ],
+    "completion": {
+      "newTrapLabelSuggested": "q3",
+      "addedTransitions": [
+        [
+          "q0",
+          "b",
+          "q3"
+        ],
+        [
+          "q1",
+          "a",
+          "q3"
+        ]
+      ],
+      "note": "תואם לטבלת האסד״מ שבמצגת. המקור לא משתנה; ההשלמה נוצרת כעותק"
+    }
+  }
+}

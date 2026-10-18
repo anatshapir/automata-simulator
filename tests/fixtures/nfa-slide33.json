@@ -1,0 +1,415 @@
+{
+  "fixtureId": "nfa-slide33",
+  "source": {
+    "material": "מצגת אס״ד לא מלא וא״ס לא דטרמיניסטי",
+    "location": "שקף 33 (תרשים ומסלול)",
+    "status": "verified-visual",
+    "note": "התרשים והמסלול נבדקו חזותית; המסלול בשקף הוא מסלול מקבל תקף"
+  },
+  "language": {
+    "description": "מתחילה ב-b, מכילה aa ומסתיימת ב-cc",
+    "bruteForceCheckedUpToLength": 8,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "verified-visual",
+    "languageBruteForceUpToLength": 8,
+    "statedRunsCheckedAgainstEngine": 1,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "א״ס לא דטרמיניסטי: מתחילה ב-b, מכילה aa, מסתיימת ב-cc",
+    "alphabet": [
+      "a",
+      "b",
+      "c"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא נקרא תו"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "התחילה ב-b, מחכה ל-aa"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "נקרא a ראשון של aa"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "היה aa, מחכה ל-cc בסוף"
+      },
+      {
+        "id": "s4",
+        "label": "q4",
+        "x": 680,
+        "y": 100,
+        "memory": "נקרא c ראשון של cc"
+      },
+      {
+        "id": "s5",
+        "label": "q5",
+        "x": 80,
+        "y": 240,
+        "memory": "מסתיימת ב-cc"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s5"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s1"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "c",
+        "to": "s1"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t5",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s3"
+      },
+      {
+        "id": "t6",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s3"
+      },
+      {
+        "id": "t7",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t8",
+        "from": "s3",
+        "symbol": "c",
+        "to": "s3"
+      },
+      {
+        "id": "t9",
+        "from": "s3",
+        "symbol": "c",
+        "to": "s4"
+      },
+      {
+        "id": "t10",
+        "from": "s4",
+        "symbol": "c",
+        "to": "s5"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "b",
+        "a",
+        "a",
+        "c",
+        "c"
+      ]
+    ],
+    "counts": {
+      "states": 6,
+      "transitions": 11,
+      "selfLoops": 6
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "b",
+          "a",
+          "c",
+          "b",
+          "a",
+          "a",
+          "a",
+          "c",
+          "c"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q1"
+          ],
+          [
+            "q1"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q1",
+            "q2",
+            "q3"
+          ],
+          [
+            "q1",
+            "q2",
+            "q3"
+          ],
+          [
+            "q1",
+            "q3",
+            "q4"
+          ],
+          [
+            "q1",
+            "q3",
+            "q4",
+            "q5"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1",
+          "q1",
+          "q1",
+          "q1",
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q5"
+        ],
+        "tree": {
+          "totalLeaves": 9,
+          "leaves": {
+            "accepting": 2,
+            "rejecting": 5,
+            "stuck": 2
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "a",
+          "a",
+          "c",
+          "c"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q1",
+            "q2",
+            "q3"
+          ],
+          [
+            "q1",
+            "q3",
+            "q4"
+          ],
+          [
+            "q1",
+            "q3",
+            "q4",
+            "q5"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q5"
+        ],
+        "tree": {
+          "totalLeaves": 5,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 3,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "a",
+          "a",
+          "c",
+          "c"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          []
+        ],
+        "emptyAtIndex": 0,
+        "unreadSymbols": [
+          "b",
+          "a",
+          "a",
+          "c",
+          "c"
+        ],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 1,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "a",
+          "a",
+          "c"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q1",
+            "q2",
+            "q3"
+          ],
+          [
+            "q1",
+            "q3",
+            "q4"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 4,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 3,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

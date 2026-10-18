@@ -1,0 +1,215 @@
+{
+  "fixtureId": "intro-contains-aa",
+  "source": {
+    "material": "מצגת מבוא לחישוביות (55 שקפים)",
+    "location": "שקפים 35, 40-41 (תרגול 1)",
+    "status": "stated-in-source"
+  },
+  "language": {
+    "description": "כל המילים מעל {a,b,c} שמכילות את הרצף aa",
+    "bruteForceCheckedUpToLength": 8,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": 8,
+    "statedRunsCheckedAgainstEngine": 5,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "מילים שמכילות את הרצף aa",
+    "alphabet": [
+      "a",
+      "b",
+      "c"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא היה aa, והתו האחרון אינו a"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "התו האחרון a"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "הרצף aa כבר הופיע"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s2"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "c",
+        "to": "s0"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "c",
+        "to": "s0"
+      },
+      {
+        "id": "t6",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t7",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s2"
+      },
+      {
+        "id": "t8",
+        "from": "s2",
+        "symbol": "c",
+        "to": "s2"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "a"
+      ]
+    ],
+    "counts": {
+      "states": 3,
+      "transitions": 9,
+      "selfLoops": 5
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "b",
+          "a",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q0",
+          "q1",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "b",
+          "c"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q2",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "b",
+          "a",
+          "b",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q0",
+          "q1",
+          "q0",
+          "q1"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "c",
+          "b",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q0",
+          "q0",
+          "q1"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,854 @@
+{
+  "cases": [
+    {
+      "caseId": "F-01-epsilon-symbol",
+      "description": "ε מוגדר כסמל באלפבית ומשמש בחץ",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "nfa",
+        "alphabet": [
+          "a",
+          "ε"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "ε",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-01",
+          "severity": "error"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-02-no-start",
+      "description": "אין מצב התחלתי",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a",
+          "b"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": null,
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "b",
+            "to": "s0"
+          },
+          {
+            "id": "t2",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t3",
+            "from": "s1",
+            "symbol": "b",
+            "to": "s0"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-02",
+          "severity": "error"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-03-missing-transition",
+      "description": "אסד״מ: חסר מעבר מ-q1 ב-b",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a",
+          "b"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "b",
+            "to": "s0"
+          },
+          {
+            "id": "t2",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-03",
+          "severity": "error",
+          "state": "q1",
+          "symbol": "b"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-04-two-targets-dfa",
+      "description": "אס״ד לא מלא: שני יעדים מ-q0 ב-a",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-partial",
+        "alphabet": [
+          "a",
+          "b"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s0"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-04",
+          "severity": "error",
+          "state": "q0",
+          "symbol": "a"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-04-not-for-identical",
+      "description": "מעבר זהה שהוזן פעמיים נשמר פעם אחת ואינו שגיאה",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a",
+          "b"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "b",
+            "to": "s0"
+          },
+          {
+            "id": "t2",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t3",
+            "from": "s1",
+            "symbol": "b",
+            "to": "s0"
+          },
+          {
+            "id": "t4",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [],
+      "expectedTransitionCountAfterLoad": 4,
+      "runnable": true
+    },
+    {
+      "caseId": "F-05-removed-symbol",
+      "description": "מעבר על הסמל c שהוסר מהאלפבית; המעבר נשמר ומסומן",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-partial",
+        "alphabet": [
+          "a",
+          "b"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "c",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-05",
+          "severity": "error",
+          "symbol": "c"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-06-symbol-with-comma",
+      "description": "סמל שמכיל פסיק",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-partial",
+        "alphabet": [
+          "a",
+          "b,c"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [],
+        "transitions": []
+      },
+      "expectedIssues": [
+        {
+          "code": "F-06",
+          "severity": "error",
+          "symbol": "b,c"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-06-symbol-with-space",
+      "description": "סמל שמכיל רווח",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-partial",
+        "alphabet": [
+          "a",
+          "on off"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [],
+        "transitions": []
+      },
+      "expectedIssues": [
+        {
+          "code": "F-06",
+          "severity": "error",
+          "symbol": "on off"
+        }
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-07-trap-without-all-loops",
+      "description": "אסד״מ: מלכודת q2 עם לולאה על a בלבד",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a",
+          "b"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s2",
+            "label": "q2",
+            "x": 380,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "b",
+            "to": "s2"
+          },
+          {
+            "id": "t2",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t3",
+            "from": "s1",
+            "symbol": "b",
+            "to": "s1"
+          },
+          {
+            "id": "t4",
+            "from": "s2",
+            "symbol": "a",
+            "to": "s2"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-07",
+          "severity": "error",
+          "state": "q2",
+          "symbol": "b"
+        }
+      ],
+      "mustNotInclude": [
+        "F-03"
+      ],
+      "runnable": false,
+      "note": "כלל קדימות: לכל תא חסר מופקת הודעה אחת בלבד. אם המצב נראה כמלכודת (לא מקבל, לולאה אחת לפחות, אין מעבר למצב אחר) - F-07; אחרת F-03"
+    },
+    {
+      "caseId": "F-03-not-F-07-when-exit",
+      "description": "אסד״מ: q1 עם לולאה על a ומעבר ל-q0, חסר מעבר ב-c; אינו נראה כמלכודת",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a",
+          "b",
+          "c"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s0"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s0",
+            "symbol": "b",
+            "to": "s0"
+          },
+          {
+            "id": "t2",
+            "from": "s0",
+            "symbol": "c",
+            "to": "s0"
+          },
+          {
+            "id": "t3",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t4",
+            "from": "s1",
+            "symbol": "b",
+            "to": "s0"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-03",
+          "severity": "error",
+          "state": "q1",
+          "symbol": "c"
+        }
+      ],
+      "mustNotInclude": [
+        "F-07"
+      ],
+      "runnable": false
+    },
+    {
+      "caseId": "F-08-unreachable",
+      "description": "q2 אינו ניתן להשגה",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s2",
+            "label": "q2",
+            "x": 380,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t2",
+            "from": "s2",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-08",
+          "severity": "warning",
+          "state": "q2"
+        }
+      ],
+      "runnable": true
+    },
+    {
+      "caseId": "F-09-missing-memory",
+      "description": "למצב q1 אין מקרא",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": ""
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-09",
+          "severity": "warning",
+          "state": "q1"
+        }
+      ],
+      "runnable": true
+    },
+    {
+      "caseId": "F-10-nfa-actually-deterministic",
+      "description": "סומן כא״ס אבל אין תא עם כמה יעדים",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "nfa",
+        "alphabet": [
+          "a"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q1",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [
+          "s1"
+        ],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "F-10",
+          "severity": "warning"
+        }
+      ],
+      "runnable": true
+    },
+    {
+      "caseId": "unique-labels",
+      "description": "שני מצבים עם אותה תווית",
+      "automaton": {
+        "schemaVersion": 1,
+        "type": "dfa-full",
+        "alphabet": [
+          "a"
+        ],
+        "states": [
+          {
+            "id": "s0",
+            "label": "q0",
+            "x": 80,
+            "y": 100,
+            "memory": "x"
+          },
+          {
+            "id": "s1",
+            "label": "q0",
+            "x": 230,
+            "y": 100,
+            "memory": "x"
+          }
+        ],
+        "initialStateId": "s0",
+        "acceptingStateIds": [],
+        "transitions": [
+          {
+            "id": "t0",
+            "from": "s0",
+            "symbol": "a",
+            "to": "s1"
+          },
+          {
+            "id": "t1",
+            "from": "s1",
+            "symbol": "a",
+            "to": "s1"
+          }
+        ]
+      },
+      "expectedIssues": [
+        {
+          "code": "label-duplicate",
+          "severity": "error"
+        }
+      ],
+      "runnable": false,
+      "note": "אין לזה קוד בקטלוג; מוצע להוסיף"
+    }
+  ],
+  "inputCases": {
+    "description": "שגיאות קלט: מילה עם סמל שאינו באלפבית (F-11)",
+    "automaton": {
+      "schemaVersion": 1,
+      "type": "dfa-full",
+      "alphabet": [
+        "0",
+        "1",
+        "2"
+      ],
+      "states": [
+        {
+          "id": "s0",
+          "label": "q0",
+          "x": 80,
+          "y": 100,
+          "memory": "x"
+        }
+      ],
+      "initialStateId": "s0",
+      "acceptingStateIds": [
+        "s0"
+      ],
+      "transitions": [
+        {
+          "id": "t0",
+          "from": "s0",
+          "symbol": "0",
+          "to": "s0"
+        },
+        {
+          "id": "t1",
+          "from": "s0",
+          "symbol": "1",
+          "to": "s0"
+        },
+        {
+          "id": "t2",
+          "from": "s0",
+          "symbol": "2",
+          "to": "s0"
+        }
+      ]
+    },
+    "words": [
+      {
+        "typed": "0312",
+        "expectedIssue": {
+          "code": "F-11",
+          "symbol": "3",
+          "position": 1
+        },
+        "note": "מיקום מאופס: 3 הוא הסמל השני ב-0312 (הנוסח בקטלוג תוקן מ'השלישי' ל'השני')"
+      },
+      {
+        "typed": "0102",
+        "expectedIssue": null
+      }
+    ]
+  }
+}

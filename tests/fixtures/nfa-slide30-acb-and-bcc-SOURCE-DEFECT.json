@@ -1,0 +1,516 @@
+{
+  "fixtureId": "nfa-slide30-acb-and-bcc-SOURCE-DEFECT",
+  "source": {
+    "material": "מצגת אס״ד לא מלא וא״ס לא דטרמיניסטי",
+    "location": "שקף 30",
+    "status": "verified-visual",
+    "note": "האוטומט בשקף אינו מקבל מילים שבהן acb ו-bcc חופפים (b משותף), למשל acbcc. ה-fixture משמר את האוטומט כפי שהוא בשקף ובודק שהמנוע מריץ אותו נאמנה; אין להשתמש בו כפתרון"
+  },
+  "language": {
+    "description": "מילים מעל {a,b,c} שמכילות acb וגם bcc (בכל סדר)",
+    "bruteForceCheckedUpToLength": 8,
+    "mismatches": 138,
+    "knownSourceDefect": {
+      "shortestCounterexample": [
+        "a",
+        "c",
+        "b",
+        "c",
+        "c"
+      ],
+      "explanation": "acbcc בשפה (acb בתחילה, bcc בסוף, חופפים ב-b) אבל האוטומט דוחה אותה",
+      "mismatchCountUpToLength": 138
+    }
+  },
+  "verification": {
+    "sourceStatus": "verified-visual",
+    "languageBruteForceUpToLength": 8,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": true
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "א״ס בשקף 30: מכילות acb וגם bcc (שגוי במקור)",
+    "alphabet": [
+      "a",
+      "b",
+      "c"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s4",
+        "label": "q4",
+        "x": 680,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s5",
+        "label": "q5",
+        "x": 80,
+        "y": 240,
+        "memory": ""
+      },
+      {
+        "id": "s6",
+        "label": "q6",
+        "x": 230,
+        "y": 240,
+        "memory": ""
+      },
+      {
+        "id": "s7",
+        "label": "q7",
+        "x": 380,
+        "y": 240,
+        "memory": ""
+      },
+      {
+        "id": "s8",
+        "label": "q8",
+        "x": 530,
+        "y": 240,
+        "memory": ""
+      },
+      {
+        "id": "s9",
+        "label": "q9",
+        "x": 680,
+        "y": 240,
+        "memory": ""
+      },
+      {
+        "id": "s10",
+        "label": "q10",
+        "x": 80,
+        "y": 380,
+        "memory": ""
+      },
+      {
+        "id": "s11",
+        "label": "q11",
+        "x": 230,
+        "y": 380,
+        "memory": ""
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s6"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "c",
+        "to": "s0"
+      },
+      {
+        "id": "t3",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "c",
+        "to": "s2"
+      },
+      {
+        "id": "t5",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t6",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s3"
+      },
+      {
+        "id": "t7",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t8",
+        "from": "s3",
+        "symbol": "c",
+        "to": "s3"
+      },
+      {
+        "id": "t9",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s4"
+      },
+      {
+        "id": "t10",
+        "from": "s4",
+        "symbol": "c",
+        "to": "s5"
+      },
+      {
+        "id": "t11",
+        "from": "s5",
+        "symbol": "c",
+        "to": "s6"
+      },
+      {
+        "id": "t12",
+        "from": "s6",
+        "symbol": "a",
+        "to": "s6"
+      },
+      {
+        "id": "t13",
+        "from": "s6",
+        "symbol": "b",
+        "to": "s6"
+      },
+      {
+        "id": "t14",
+        "from": "s6",
+        "symbol": "c",
+        "to": "s6"
+      },
+      {
+        "id": "t15",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s7"
+      },
+      {
+        "id": "t16",
+        "from": "s7",
+        "symbol": "c",
+        "to": "s8"
+      },
+      {
+        "id": "t17",
+        "from": "s8",
+        "symbol": "c",
+        "to": "s9"
+      },
+      {
+        "id": "t18",
+        "from": "s9",
+        "symbol": "a",
+        "to": "s9"
+      },
+      {
+        "id": "t19",
+        "from": "s9",
+        "symbol": "b",
+        "to": "s9"
+      },
+      {
+        "id": "t20",
+        "from": "s9",
+        "symbol": "c",
+        "to": "s9"
+      },
+      {
+        "id": "t21",
+        "from": "s9",
+        "symbol": "a",
+        "to": "s10"
+      },
+      {
+        "id": "t22",
+        "from": "s10",
+        "symbol": "c",
+        "to": "s11"
+      },
+      {
+        "id": "t23",
+        "from": "s11",
+        "symbol": "b",
+        "to": "s6"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "c",
+        "b",
+        "b",
+        "c",
+        "c"
+      ],
+      [
+        "b",
+        "c",
+        "c",
+        "a",
+        "c",
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 12,
+      "transitions": 24,
+      "selfLoops": 12
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "c",
+          "b",
+          "c",
+          "c"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q3",
+            "q7"
+          ],
+          [
+            "q0",
+            "q3",
+            "q8"
+          ],
+          [
+            "q0",
+            "q3",
+            "q9"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 3,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 3,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "c",
+          "b",
+          "b",
+          "c",
+          "c"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q1"
+          ],
+          [
+            "q0",
+            "q2"
+          ],
+          [
+            "q0",
+            "q3",
+            "q7"
+          ],
+          [
+            "q0",
+            "q3",
+            "q4",
+            "q7"
+          ],
+          [
+            "q0",
+            "q3",
+            "q5",
+            "q8"
+          ],
+          [
+            "q0",
+            "q3",
+            "q6",
+            "q9"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q5",
+          "q6"
+        ],
+        "tree": {
+          "totalLeaves": 5,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 3,
+            "stuck": 1
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "b",
+          "c",
+          "c",
+          "a",
+          "c",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q0",
+            "q7"
+          ],
+          [
+            "q0",
+            "q8"
+          ],
+          [
+            "q0",
+            "q9"
+          ],
+          [
+            "q0",
+            "q1",
+            "q9",
+            "q10"
+          ],
+          [
+            "q0",
+            "q2",
+            "q9",
+            "q11"
+          ],
+          [
+            "q0",
+            "q3",
+            "q6",
+            "q7",
+            "q9"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q7",
+          "q8",
+          "q9",
+          "q10",
+          "q11",
+          "q6"
+        ],
+        "tree": {
+          "totalLeaves": 5,
+          "leaves": {
+            "accepting": 1,
+            "rejecting": 4,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

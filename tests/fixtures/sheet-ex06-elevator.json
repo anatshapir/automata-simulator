@@ -1,0 +1,146 @@
+{
+  "fixtureId": "sheet-ex06-elevator",
+  "source": {
+    "material": "דף תרגילים לשיעורי בית: מבוא למודלים חישוביים",
+    "location": "תרגיל 6",
+    "status": "stated-in-source",
+    "note": "תיאור מערכת ללא מצבים מקבלים"
+  },
+  "language": {
+    "description": "תיאור מערכת, ללא שפה",
+    "bruteForceCheckedUpToLength": null,
+    "mismatches": null
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": null,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "מעלית בבניין 3 קומות",
+    "alphabet": [
+      "1",
+      "2",
+      "3"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "קומה 1",
+        "x": 80,
+        "y": 100,
+        "memory": "המעלית בקומה 1"
+      },
+      {
+        "id": "s1",
+        "label": "קומה 2",
+        "x": 230,
+        "y": 100,
+        "memory": "המעלית בקומה 2"
+      },
+      {
+        "id": "s2",
+        "label": "קומה 3",
+        "x": 380,
+        "y": 100,
+        "memory": "המעלית בקומה 3"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "3",
+        "to": "s2"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "3",
+        "to": "s2"
+      },
+      {
+        "id": "t6",
+        "from": "s2",
+        "symbol": "1",
+        "to": "s0"
+      },
+      {
+        "id": "t7",
+        "from": "s2",
+        "symbol": "2",
+        "to": "s1"
+      },
+      {
+        "id": "t8",
+        "from": "s2",
+        "symbol": "3",
+        "to": "s2"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [],
+    "counts": {
+      "states": 3,
+      "transitions": 9,
+      "selfLoops": 3
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "קומה 1",
+      "קומה 2",
+      "קומה 3"
+    ],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "2",
+          "3",
+          "1"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "קומה 1",
+          "קומה 2",
+          "קומה 3",
+          "קומה 1"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

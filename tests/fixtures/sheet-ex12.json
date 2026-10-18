@@ -1,0 +1,258 @@
+{
+  "fixtureId": "sheet-ex12",
+  "source": {
+    "material": "דף תרגילים לשיעורי בית: מבוא למודלים חישוביים",
+    "location": "תרגיל 12 ★ + פתרון",
+    "status": "stated-in-source"
+  },
+  "language": {
+    "description": "כל המילים מעל {a,b,c} שלא מסתיימות ב-a, מכילות aa ולא מכילות aaa",
+    "bruteForceCheckedUpToLength": 8,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": 8,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "aa לפחות פעם, בלי aaa, לא מסתיימת ב-a",
+    "alphabet": [
+      "a",
+      "b",
+      "c"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא היה aa, אחרון לא a"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "עוד לא היה aa, אחרון a"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "סוף המילה aa"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "היה aa, אחרון לא a"
+      },
+      {
+        "id": "s4",
+        "label": "q4",
+        "x": 680,
+        "y": 100,
+        "memory": "היה aa, אחרון a בודדת"
+      },
+      {
+        "id": "s5",
+        "label": "q5",
+        "x": 80,
+        "y": 240,
+        "memory": "הופיע aaa (מלכודת)"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s3"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t2",
+        "from": "s0",
+        "symbol": "c",
+        "to": "s0"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t4",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s0"
+      },
+      {
+        "id": "t5",
+        "from": "s1",
+        "symbol": "c",
+        "to": "s0"
+      },
+      {
+        "id": "t6",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s5"
+      },
+      {
+        "id": "t7",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t8",
+        "from": "s2",
+        "symbol": "c",
+        "to": "s3"
+      },
+      {
+        "id": "t9",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s4"
+      },
+      {
+        "id": "t10",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t11",
+        "from": "s3",
+        "symbol": "c",
+        "to": "s3"
+      },
+      {
+        "id": "t12",
+        "from": "s4",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t13",
+        "from": "s4",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t14",
+        "from": "s4",
+        "symbol": "c",
+        "to": "s3"
+      },
+      {
+        "id": "t15",
+        "from": "s5",
+        "symbol": "a",
+        "to": "s5"
+      },
+      {
+        "id": "t16",
+        "from": "s5",
+        "symbol": "b",
+        "to": "s5"
+      },
+      {
+        "id": "t17",
+        "from": "s5",
+        "symbol": "c",
+        "to": "s5"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "a",
+        "b"
+      ],
+      [
+        "a",
+        "a",
+        "c"
+      ]
+    ],
+    "counts": {
+      "states": 6,
+      "transitions": 18,
+      "selfLoops": 7
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "q5"
+    ],
+    "trapStates": [
+      "q5"
+    ],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q5",
+          "q5"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "b",
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q3",
+          "q4",
+          "q2",
+          "q3"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

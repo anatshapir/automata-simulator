@@ -1,0 +1,176 @@
+{
+  "fixtureId": "sheet-ex08",
+  "source": {
+    "material": "דף תרגילים לשיעורי בית: מבוא למודלים חישוביים",
+    "location": "תרגיל 8 + טבלת פתרון",
+    "status": "stated-in-source"
+  },
+  "language": {
+    "description": "כל המילים מעל {a,b} שאורכן לכל היותר 2",
+    "bruteForceCheckedUpToLength": 10,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "stated-in-source",
+    "languageBruteForceUpToLength": 10,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "מילים באורך לכל היותר 2",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "נקראו 0 תווים"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "נקרא תו אחד"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "נקראו 2 תווים"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "נקראו יותר מ-2 תווים (מלכודת)"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s0",
+      "s1",
+      "s2"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s1"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s2"
+      },
+      {
+        "id": "t4",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s3"
+      },
+      {
+        "id": "t5",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t6",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s3"
+      },
+      {
+        "id": "t7",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s3"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": true,
+    "shortestAcceptedWords": [
+      []
+    ],
+    "counts": {
+      "states": 4,
+      "transitions": 8,
+      "selfLoops": 2
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "q3"
+    ],
+    "trapStates": [
+      "q3"
+    ],
+    "runs": [
+      {
+        "word": [],
+        "statedInSource": false,
+        "accepted": true,
+        "path": [
+          "q0"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q3"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

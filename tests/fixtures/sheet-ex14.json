@@ -1,0 +1,390 @@
+{
+  "fixtureId": "sheet-ex14",
+  "source": {
+    "material": "דף תרגילים לשיעורי בית: מבוא למודלים חישוביים",
+    "location": "תרגיל 14 (תרשים) + פתרון",
+    "status": "verified-visual",
+    "note": "המעברים הועתקו מתמונת התרשים ונבדקו מול נוסחת השפה שבפתרון. אין q5 בתרשים"
+  },
+  "language": {
+    "description": "L = { aⁿbᵐ | n ≥ 1, m ≥ 2, ואם n אי-זוגי אז m % 3 = 0, ואם n זוגי אז m % 3 = 2 }",
+    "bruteForceCheckedUpToLength": 12,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "verified-visual",
+    "languageBruteForceUpToLength": 12,
+    "statedRunsCheckedAgainstEngine": 7,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "dfa-full",
+    "title": "מאוטומט לשפה: aⁿbᵐ",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": "עוד לא נקרא תו"
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "מספר אי-זוגי של a ועוד אין b"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "מספר זוגי של a"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "מספר אי-זוגי של a ואחריו b אחד"
+      },
+      {
+        "id": "s4",
+        "label": "q4",
+        "x": 680,
+        "y": 100,
+        "memory": "a אחרי b (מלכודת)"
+      },
+      {
+        "id": "s5",
+        "label": "q6",
+        "x": 80,
+        "y": 240,
+        "memory": "מחזור ספירת b במודולו 3"
+      },
+      {
+        "id": "s6",
+        "label": "q7",
+        "x": 230,
+        "y": 240,
+        "memory": "מחזור ספירת b במודולו 3, מקבל"
+      },
+      {
+        "id": "s7",
+        "label": "q8",
+        "x": 380,
+        "y": 240,
+        "memory": "מחזור ספירת b במודולו 3"
+      },
+      {
+        "id": "s8",
+        "label": "q9",
+        "x": 530,
+        "y": 240,
+        "memory": "המילה התחילה ב-b (מלכודת)"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s6"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "b",
+        "to": "s8"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t3",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t4",
+        "from": "s2",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t5",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s5"
+      },
+      {
+        "id": "t6",
+        "from": "s3",
+        "symbol": "a",
+        "to": "s4"
+      },
+      {
+        "id": "t7",
+        "from": "s3",
+        "symbol": "b",
+        "to": "s5"
+      },
+      {
+        "id": "t8",
+        "from": "s4",
+        "symbol": "a",
+        "to": "s4"
+      },
+      {
+        "id": "t9",
+        "from": "s4",
+        "symbol": "b",
+        "to": "s4"
+      },
+      {
+        "id": "t10",
+        "from": "s5",
+        "symbol": "a",
+        "to": "s4"
+      },
+      {
+        "id": "t11",
+        "from": "s5",
+        "symbol": "b",
+        "to": "s6"
+      },
+      {
+        "id": "t12",
+        "from": "s6",
+        "symbol": "a",
+        "to": "s4"
+      },
+      {
+        "id": "t13",
+        "from": "s6",
+        "symbol": "b",
+        "to": "s7"
+      },
+      {
+        "id": "t14",
+        "from": "s7",
+        "symbol": "a",
+        "to": "s4"
+      },
+      {
+        "id": "t15",
+        "from": "s7",
+        "symbol": "b",
+        "to": "s5"
+      },
+      {
+        "id": "t16",
+        "from": "s8",
+        "symbol": "a",
+        "to": "s8"
+      },
+      {
+        "id": "t17",
+        "from": "s8",
+        "symbol": "b",
+        "to": "s8"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "a",
+        "b",
+        "b"
+      ],
+      [
+        "a",
+        "b",
+        "b",
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 9,
+      "transitions": 18,
+      "selfLoops": 4
+    },
+    "unreachableStates": [],
+    "deadStates": [
+      "q4",
+      "q9"
+    ],
+    "trapStates": [
+      "q4",
+      "q9"
+    ],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "b",
+          "b",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q1",
+          "q3",
+          "q6",
+          "q7"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "a",
+          "b",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q1",
+          "q2",
+          "q6",
+          "q7"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "b",
+          "b",
+          "b",
+          "b",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": true,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q6",
+          "q7",
+          "q8",
+          "q6",
+          "q7"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q1",
+          "q2"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "b",
+          "a"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q3",
+          "q6",
+          "q4"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "b",
+          "b",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q3",
+          "q6",
+          "q7",
+          "q8"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      },
+      {
+        "word": [
+          "a",
+          "a",
+          "a",
+          "b"
+        ],
+        "statedInSource": true,
+        "accepted": false,
+        "path": [
+          "q0",
+          "q1",
+          "q2",
+          "q1",
+          "q3"
+        ],
+        "stuck": null,
+        "unreadSymbols": []
+      }
+    ]
+  }
+}

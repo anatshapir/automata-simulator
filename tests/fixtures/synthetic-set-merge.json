@@ -1,0 +1,227 @@
+{
+  "fixtureId": "synthetic-set-merge",
+  "source": {
+    "material": "סינתטי",
+    "location": "קבוצת מצבים פעילים מול עץ",
+    "status": "synthetic",
+    "note": "במילה ab שני ענפים מגיעים ל-q3: בקבוצה q3 מופיע פעם אחת, בעץ יש שני עלים"
+  },
+  "language": {
+    "description": "המילה ab בלבד",
+    "bruteForceCheckedUpToLength": 6,
+    "mismatches": 0
+  },
+  "verification": {
+    "sourceStatus": "synthetic",
+    "languageBruteForceUpToLength": 6,
+    "statedRunsCheckedAgainstEngine": 0,
+    "knownSourceDefect": false
+  },
+  "automaton": {
+    "schemaVersion": 1,
+    "type": "nfa",
+    "title": "איחוד ענפים בקבוצת המצבים",
+    "alphabet": [
+      "a",
+      "b"
+    ],
+    "states": [
+      {
+        "id": "s0",
+        "label": "q0",
+        "x": 80,
+        "y": 100,
+        "memory": ""
+      },
+      {
+        "id": "s1",
+        "label": "q1",
+        "x": 230,
+        "y": 100,
+        "memory": "ענף עליון"
+      },
+      {
+        "id": "s2",
+        "label": "q2",
+        "x": 380,
+        "y": 100,
+        "memory": "ענף תחתון"
+      },
+      {
+        "id": "s3",
+        "label": "q3",
+        "x": 530,
+        "y": 100,
+        "memory": "שני הענפים התאחדו"
+      }
+    ],
+    "initialStateId": "s0",
+    "acceptingStateIds": [
+      "s3"
+    ],
+    "transitions": [
+      {
+        "id": "t0",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s1"
+      },
+      {
+        "id": "t1",
+        "from": "s0",
+        "symbol": "a",
+        "to": "s2"
+      },
+      {
+        "id": "t2",
+        "from": "s1",
+        "symbol": "b",
+        "to": "s3"
+      },
+      {
+        "id": "t3",
+        "from": "s2",
+        "symbol": "b",
+        "to": "s3"
+      }
+    ]
+  },
+  "expected": {
+    "acceptsEpsilon": false,
+    "shortestAcceptedWords": [
+      [
+        "a",
+        "b"
+      ]
+    ],
+    "counts": {
+      "states": 4,
+      "transitions": 4,
+      "selfLoops": 0
+    },
+    "unreachableStates": [],
+    "deadStates": [],
+    "trapStates": [],
+    "runs": [
+      {
+        "word": [
+          "a",
+          "b"
+        ],
+        "statedInSource": false,
+        "accepted": true,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q3"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": [
+          "q0",
+          "q1",
+          "q3"
+        ],
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 2,
+            "rejecting": 0,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ]
+        ],
+        "emptyAtIndex": null,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 2,
+            "stuck": 0
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      },
+      {
+        "word": [
+          "a",
+          "b",
+          "a"
+        ],
+        "statedInSource": false,
+        "accepted": false,
+        "activeSets": [
+          [
+            "q0"
+          ],
+          [
+            "q1",
+            "q2"
+          ],
+          [
+            "q3"
+          ],
+          []
+        ],
+        "emptyAtIndex": 2,
+        "unreadSymbols": [],
+        "oneAcceptingPath": null,
+        "tree": {
+          "totalLeaves": 2,
+          "leaves": {
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 2
+          },
+          "displayRule": "full",
+          "shownAcceptingPaths": null,
+          "hidden": {
+            "total": 0,
+            "accepting": 0,
+            "rejecting": 0,
+            "stuck": 0
+          }
+        }
+      }
+    ]
+  }
+}

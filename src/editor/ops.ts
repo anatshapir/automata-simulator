@@ -53,6 +53,12 @@ export function setEdgeSymbols(a: Automaton, from: string, to: string, symbols: 
     symbols.map(symbol => ({ from, symbol, to })));
 }
 
+/** Redirect an arrow: all its symbols move from (from -> to) to (newFrom -> newTo), merging with an existing arrow. */
+export function moveEdge(a: Automaton, from: string, to: string, newFrom: string, newTo: string): Automaton {
+  const symbols = a.transitions.filter(t => t.from === from && t.to === to).map(t => t.symbol);
+  return withTransitions(a, t => !(t.from === from && t.to === to), symbols.map(symbol => ({ from: newFrom, symbol, to: newTo })));
+}
+
 /** A table cell δ(from, symbol). */
 export function setCell(a: Automaton, from: string, symbol: string, targets: string[]): Automaton {
   return withTransitions(a, t => !(t.from === from && t.symbol === symbol) || targets.includes(t.to),

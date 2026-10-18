@@ -4,7 +4,7 @@ import type { Issue } from "../validation/validate.js";
 import { type CanvasTool, Graph } from "../editor/graph/Graph.js";
 import { edgeKey } from "../editor/graph/geometry.js";
 import { FormalDefinition, TransitionTable, Triples, tableAsText } from "../editor/transition-table/Table.js";
-import { addState, autoLayout, deleteState, moveState, parseAlphabet, patchState, setAlphabet, setCell, setEdgeSymbols, setInitial, setType, toggleAccepting } from "../editor/ops.js";
+import { addState, autoLayout, deleteState, moveEdge, moveState, parseAlphabet, patchState, setAlphabet, setCell, setEdgeSymbols, setInitial, setType, toggleAccepting } from "../editor/ops.js";
 import { IconRedo, IconUndo, LockIcon } from "./icons.js";
 
 export interface EditApi {
@@ -67,7 +67,7 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
       const L = latest.current;
-      if (L.readOnly || (e.target as HTMLElement).closest("input, textarea, select")) return;
+      if (L.readOnly || (e.target instanceof HTMLElement && e.target.closest("input, textarea, select"))) return;
       if (e.key === "Delete" || e.key === "Backspace") {
         if (L.edge) { e.preventDefault(); L.removeEdge(L.edge.from, L.edge.to); }
         else if (L.sel) { e.preventDefault(); L.removeState(L.sel); }
@@ -194,7 +194,8 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
             );
           })()}
           {edge && !readOnly && <EdgePopover a={a} edge={edge} onClose={() => setEdge(null)}
-            onChange={symbols => edit.set(x => setEdgeSymbols(x, edge.from, edge.to, symbols))} onDelete={() => removeEdge(edge.from, edge.to)} />}
+            onChange={symbols => edit.set(x => setEdgeSymbols(x, edge.from, edge.to, symbols))} onDelete={() => removeEdge(edge.from, edge.to)}
+            onRedirect={(nf, nt) => { edit.set(x => moveEdge(x, edge.from, edge.to, nf, nt)); setEdge({ ...edge, from: nf, to: nt }); }} />}
         </section>
 
         <section class="card">
@@ -233,7 +234,7 @@ function AlphabetField({ a, disabled, onChange }: { a: Automaton; disabled: bool
   );
 }
 
-function EdgePopover({ a, edge, onChange, onClose, onDelete }: { a: Automaton; edge: { from: string; to: string; x: number; y: number }; onChange: (s: string[]) => void; onClose: () => void; onDelete: () => void }) {
+function EdgePopover({ a, edge, onChange, onClose, onDelete, onRedirect }: { a: Automaton; edge: { from: string; to: string; x: number; y: number }; onChange: (s: string[]) => void; onClose: () => void; onDelete: () => void; onRedirect: (from: string, to: string) => void }) {
   const on = new Set(a.transitions.filter(t => t.from === edge.from && t.to === edge.to).map(t => t.symbol));
   const label = (id: string) => a.states.find(s => s.id === id)?.label ?? id;
   const extra = [...on].filter(c => !a.alphabet.includes(c));
@@ -246,6 +247,22 @@ function EdgePopover({ a, edge, onChange, onClose, onDelete }: { a: Automaton; e
     <div class="pop" style={{ left: `${Math.min(Math.max(8, edge.x - 120), 9999)}px`, top: `${edge.y + 18}px` }}>
       <div class="between"><strong>{edge.from === edge.to ? `לולאה על ${label(edge.from)}` : `מעבר מ-${label(edge.from)} אל ${label(edge.to)}`}</strong>
         <button type="button" class="btn btn-sm btn-ghost" onClick={onClose} aria-label="סגירה">✕</button></div>
+      {on.size > 0 && (
+        <div class="row small" style={{ gap: "6px" }}>
+          <label class="row" style={{ gap: "4px" }}>מ-
+            <select class="input mono" style={{ width: "auto", minHeight: "34px", padding: "2px 6px" }} aria-label="מצב המקור" value={edge.from}
+              onChange={e => onRedirect((e.target as HTMLSelectElement).value, edge.to)}>
+              {a.states.map(st => <option key={st.id} value={st.id}>{st.label}</option>)}
+            </select>
+          </label>
+          <label class="row" style={{ gap: "4px" }}>אל
+            <select class="input mono" style={{ width: "auto", minHeight: "34px", padding: "2px 6px" }} aria-label="מצב היעד" value={edge.to}
+              onChange={e => onRedirect(edge.from, (e.target as HTMLSelectElement).value)}>
+              {a.states.map(st => <option key={st.id} value={st.id}>{st.label}</option>)}
+            </select>
+          </label>
+        </div>
+      )}
       <div class="small muted">באילו סמלים עוברים? (כמה סמלים = a,b על החץ)</div>
       <div class="symbol-checks">
         {a.alphabet.map(c => <button type="button" key={c} class={`chip${on.has(c) ? " on" : ""}`} aria-pressed={on.has(c)} onClick={() => toggle(c)}>{c}</button>)}

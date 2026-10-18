@@ -74,7 +74,7 @@ export function App() {
   // keyboard: step forward/back/reset in run mode; undo/redo while building (spec 8: basic shortcuts only)
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
-      const el = e.target as HTMLElement;
+      const el = e.target instanceof HTMLElement ? e.target : document.body;
       const typing = el.closest("input, textarea, select, [contenteditable]");
       if ((view === "run" || present) && !typing) {
         if (e.key === "ArrowRight") { e.preventDefault(); rn.forward(); }
@@ -83,8 +83,9 @@ export function App() {
         else if (e.key === " " && !el.closest("button")) { e.preventDefault(); rn.toggle(); }
       }
       if (view === "build" && !typing && (e.ctrlKey || e.metaKey)) {
-        if (e.key.toLowerCase() === "z" && !e.shiftKey) { e.preventDefault(); hist.undo(); }
-        else if (e.key.toLowerCase() === "y" || (e.key.toLowerCase() === "z" && e.shiftKey)) { e.preventDefault(); hist.redo(); }
+        // e.code, not e.key: with a Hebrew keyboard layout Ctrl+Z arrives as "ז"
+        if (e.code === "KeyZ" && !e.shiftKey) { e.preventDefault(); hist.undo(); }
+        else if (e.code === "KeyY" || (e.code === "KeyZ" && e.shiftKey)) { e.preventDefault(); hist.redo(); }
       }
     };
     window.addEventListener("keydown", k);

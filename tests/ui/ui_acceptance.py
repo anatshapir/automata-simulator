@@ -95,6 +95,24 @@ async def main():
               bar and acc_on and acc_off and n_states == 3 and edges1 == edges0 - 1 and await pg.locator(".g-edge").count() == edges0,
               f"bar={bar} on={acc_on} off={acc_off} states={n_states} edges {edges0}->{edges1}")
 
+        # Undo with a Hebrew keyboard layout (Ctrl + the Z key arrives as "ז") and redirecting an arrow
+        n0 = await pg.locator(".g-state").count()
+        await pg.click("button:has-text('+ מצב')")
+        cvb = await pg.locator(".canvas > svg").bounding_box()
+        await pg.mouse.click(cvb["x"] + cvb["width"] * 0.5, cvb["y"] + cvb["height"] * 0.85)
+        added = await pg.locator(".g-state").count() == n0 + 1
+        await pg.evaluate("""() => document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'ז', code: 'KeyZ', ctrlKey: true, bubbles: true }))""")
+        await pg.wait_for_timeout(100)
+        undone = await pg.locator(".g-state").count() == n0
+        check("Ctrl+Z undoes with a Hebrew keyboard layout", added and undone)
+        await pg.locator(".g-edge text", has_text="a,b,c").first.click()
+        await pg.select_option("select[aria-label='מצב היעד']", label="q0")
+        row = await pg.eval_on_selector_all("table.delta tr", "rows => rows.map(r => [...r.querySelectorAll('select')].map(s => s.options[s.selectedIndex].text).join(' '))")
+        await pg.click(".pop button:has-text('סיום')")
+        await pg.click("button[aria-label='ביטול']")
+        row_after_undo = await pg.eval_on_selector_all("table.delta tr", "rows => rows.map(r => [...r.querySelectorAll('select')].map(s => s.options[s.selectedIndex].text).join(' '))")
+        check("Editing an arrow: its target can be changed (and undone)", row[-1] == "q0 q0 q0" and row_after_undo[-1] == "q2 q2 q2", f"{row[-1]} / {row_after_undo[-1]}")
+
         # AC-33 / AC-13: run locks editing; back restores; changing the word cancels the run
         await pg.click("header >> text=הרצה")
         editable = await pg.locator(".canvas-tools").count() + await pg.locator("table.delta select").count()

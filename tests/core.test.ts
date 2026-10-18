@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { moveEdge } from "../src/editor/ops.js";
 import {
   type Automaton, checkWords, acceptedUpTo, parseAutomatonFile, parseWord, run, serializeAutomaton, showWord, tree, validate, hiddenMessage,
 } from "../src/index.js";
@@ -117,4 +118,12 @@ describe("work preservation", () => {
     expect(asNfa.transitions).toEqual(containsAa.transitions);
     expect(validate(asNfa).map(i => i.code)).toContain("F-10");
   });
+});
+
+it("redirecting an arrow keeps its symbols and merges with an existing arrow", () => {
+  const b = moveEdge(containsAa, "q2", "q2", "q2", "q0");
+  expect(b.transitions.filter(t => t.from === "q2" && t.to === "q0").map(t => t.symbol)).toEqual(["a", "b"]);
+  expect(b.transitions.some(t => t.from === "q2" && t.to === "q2")).toBe(false);
+  const c = moveEdge(containsAa, "q1", "q0", "q1", "q2"); // merge into existing q1 -a-> q2
+  expect(c.transitions.filter(t => t.from === "q1" && t.to === "q2").map(t => t.symbol).sort()).toEqual(["a", "b"]);
 });

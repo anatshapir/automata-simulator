@@ -28,6 +28,8 @@ interface Props {
   svgRef?: { current: SVGSVGElement | null };
   onMove?: (id: string, x: number, y: number, done: boolean) => void;
   onSelectState?: (id: string | null) => void;
+  /** double-click on a state (used to toggle accepting) */
+  onStateDblClick?: (id: string) => void;
   onSelectEdge?: (from: string, to: string, at: { x: number; y: number }) => void;
   onAddState?: (x: number, y: number) => void;
   onAddEdge?: (from: string, to: string, at: { x: number; y: number }) => void;
@@ -129,6 +131,12 @@ export function Graph(p: Props) {
   };
   const dbl = (e: MouseEvent) => {
     if (!p.editable || tool !== "select") return;
+    const hit = (e.target as Element).closest(".g-state, .g-edge");
+    if (hit) {
+      const id = hit.getAttribute("data-id");
+      if (id && hit.classList.contains("g-state")) p.onStateDblClick?.(id);
+      return;
+    }
     const q = toSvg(e);
     p.onAddState?.(Math.round(q.x), Math.round(q.y));
   };
@@ -176,7 +184,8 @@ export function Graph(p: Props) {
           h.errStates?.has(s.id) && !cur && "err", (p.selectedState === s.id || edgeFrom === s.id) && "sel"].filter(Boolean).join(" ");
         const fs = Math.min(17 * scale, (2 * r - 8) / Math.max(2, [...s.label].length) * 1.75);
         return (
-          <g class={cls} key={s.id} onPointerDown={e => downState(e as PointerEvent, s.id)} style={{ cursor: p.editable ? (tool === "edge" ? "pointer" : "grab") : "default" }}>
+          <g class={cls} key={s.id} data-id={s.id} onPointerDown={e => downState(e as PointerEvent, s.id)}
+            onContextMenu={e => { if (p.editable) { e.preventDefault(); p.onSelectState?.(s.id); } }} style={{ cursor: p.editable ? (tool === "edge" ? "pointer" : "grab") : "default" }}>
             <circle class="body" cx={s.x} cy={s.y} r={r} />
             {accepting.has(s.id) && <circle class="ring" cx={s.x} cy={s.y} r={r - 5 * gs} />}
             <text x={s.x} y={s.y + fs * 0.36} text-anchor="middle" style={{ fontSize: `${fs}px` }}>{s.label}</text>

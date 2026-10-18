@@ -232,3 +232,10 @@ table.delta select:hover, table.delta input:hover, table.delta select:focus, tab
   .side { flex-basis: 100%; }
   .canvas { height: 360px; }
 }
+
+/* actions next to the selected state (where you click, not in the side panel) */
+.state-bar { position: absolute; z-index: 6; display: flex; gap: 6px; align-items: center; background: #fff; border: 1px solid var(--line-strong);
+  border-radius: 10px; box-shadow: 0 8px 24px rgba(23,32,51,.14); padding: 6px; direction: rtl; flex-wrap: nowrap; white-space: nowrap; }
+.state-bar .btn.on { background: var(--blue-soft); border-color: var(--blue); color: var(--blue-ink); }
+.g-edge:hover path:not(.hit) { stroke: var(--blue); }
+.g-edge:hover text { fill: var(--blue-ink); }

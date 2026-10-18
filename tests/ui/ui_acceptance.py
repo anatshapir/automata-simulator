@@ -75,6 +75,26 @@ async def main():
         restored = await pg.locator(".g-state").count()
         check("AC-18 delete state removes its transitions, can be undone", after < before and "נמחק" in toast and restored == 3, toast)
 
+        # Editing where you click: toolbar next to the state, double-click = accepting, Delete key for arrows
+        async def center(label):
+            bb = await pg.locator(".g-state", has_text=label).first.locator("circle.body").bounding_box()
+            return bb["x"] + bb["width"] / 2, bb["y"] + bb["height"] / 2
+        x, y = await center("q0"); await pg.mouse.click(x, y)
+        bar = await pg.locator(".state-bar").count() == 1
+        await pg.click(".state-bar button:has-text('מקבל')")
+        acc_on = await pg.locator(".g-state", has_text="q0").first.locator("circle.ring").count() == 1
+        x, y = await center("q0"); await pg.mouse.dblclick(x, y)
+        acc_off = await pg.locator(".g-state", has_text="q0").first.locator("circle.ring").count() == 0
+        n_states = await pg.locator(".g-state").count()
+        edges0 = await pg.locator(".g-edge").count()
+        await pg.locator(".g-edge text", has_text="a,b,c").first.click()
+        await pg.keyboard.press("Delete")
+        edges1 = await pg.locator(".g-edge").count()
+        await pg.click("button[aria-label='ביטול']")
+        check("Editing: state toolbar, double-click toggles accepting, Delete removes an arrow",
+              bar and acc_on and acc_off and n_states == 3 and edges1 == edges0 - 1 and await pg.locator(".g-edge").count() == edges0,
+              f"bar={bar} on={acc_on} off={acc_off} states={n_states} edges {edges0}->{edges1}")
+
         # AC-33 / AC-13: run locks editing; back restores; changing the word cancels the run
         await pg.click("header >> text=הרצה")
         editable = await pg.locator(".canvas-tools").count() + await pg.locator("table.delta select").count()
@@ -87,6 +107,14 @@ async def main():
         prog = await pg.inner_text("text=/נקראו \\d+ מתוך/")
         check("AC-33 editing locked while running; changing the word resets", editable == 0 and "נקראו 0" in prog, prog)
         check("AC-13 step back restores the previous configuration", p1.count("->") == 1 and p2.count("->") == 2, f"{p1} | {p2}")
+
+        # regression: after a run reaches the end, a new word runs again
+        await pg.fill("input[aria-label='המילה להרצה']", "aa")
+        await pg.click("button:has-text('לסוף')")
+        await pg.fill("input[aria-label='המילה להרצה']", "baa")
+        enabled = await pg.locator("button:has-text('צעד קדימה')").is_enabled()
+        await pg.click("button:has-text('צעד קדימה')")
+        check("A second word runs after the first one finished", enabled and "נקראו 1" in await pg.inner_text("text=/נקראו/"))
 
         # AC-26: readable sizes at 1366x768
         mf, where = await min_font(pg, ".app")

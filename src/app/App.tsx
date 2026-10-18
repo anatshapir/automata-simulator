@@ -50,6 +50,17 @@ export function App() {
     const pristine = !a.title && a.states.length <= 1 && a.transitions.length === 0 && !a.task;
     if (pristine) deleteDraft(); else saveDraft(a); // an untouched blank automaton is not worth offering back
   }, [a, decided]);
+  // also save when the tab is closed or reloaded right after an edit (effects run after paint)
+  const latestA = useRef({ a, decided });
+  latestA.current = { a, decided };
+  useEffect(() => {
+    const flush = () => {
+      const { a: cur, decided: ok } = latestA.current;
+      if (ok && (cur.title || cur.states.length > 1 || cur.transitions.length || cur.task)) saveDraft(cur);
+    };
+    window.addEventListener("pagehide", flush);
+    return () => window.removeEventListener("pagehide", flush);
+  }, []);
 
   const task = a.task;
   const student = !!task && !teacher;

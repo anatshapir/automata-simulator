@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { type Automaton, type AutomatonType, TYPE_NAMES } from "../model/automaton.js";
 import type { Issue } from "../validation/validate.js";
 import { type CanvasTool, Graph } from "../editor/graph/Graph.js";
@@ -46,6 +46,48 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
   const warnings = issues.filter(i => i.severity === "warning");
   const state = a.states.find(s => s.id === sel) ?? null;
 
+  const removeState = (id: string) => {
+    const st = a.states.find(s => s.id === id);
+    if (!st) return;
+    const warn = id === a.initialStateId ? " זה היה המצב ההתחלתי: סמנו מצב התחלתי אחר." : a.acceptingStateIds.includes(id) ? " זה היה מצב מקבל." : "";
+    edit.set(x => deleteState(x, id));
+    setSel(null);
+    toast(`${st.label} נמחק יחד עם המעברים שלו.${warn} אפשר לבטל.`);
+  };
+  const removeEdge = (from: string, to: string) => {
+    edit.set(x => setEdgeSymbols(x, from, to, []));
+    setEdge(null);
+    toast("החץ נמחק. אפשר לבטל.");
+  };
+
+  // Delete / Backspace removes what is selected; Esc clears the selection.
+  // The handler reads the latest selection through a ref (effects run after paint, a key can come first).
+  const latest = useRef({ sel, edge, removeState, removeEdge, readOnly });
+  latest.current = { sel, edge, removeState, removeEdge, readOnly };
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => {
+      const L = latest.current;
+      if (L.readOnly || (e.target as HTMLElement).closest("input, textarea, select")) return;
+      if (e.key === "Delete" || e.key === "Backspace") {
+        if (L.edge) { e.preventDefault(); L.removeEdge(L.edge.from, L.edge.to); }
+        else if (L.sel) { e.preventDefault(); L.removeState(L.sel); }
+      } else if (e.key === "Escape") { setSel(null); setEdge(null); setTool("select"); }
+    };
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, []);
+
+  /** where a state sits on screen, relative to the canvas card */
+  const screenOf = (x: number, y: number) => {
+    const el = svgRef.current;
+    const m = el?.getScreenCTM();
+    if (!el || !m) return null;
+    const pt = el.createSVGPoint(); pt.x = x; pt.y = y;
+    const q = pt.matrixTransform(m);
+    const r = el.getBoundingClientRect();
+    return { x: q.x - r.left, y: q.y - r.top, w: r.width };
+  };
+
   const onAddState = (x: number, y: number) => {
     const r = addState(a, x, y);
     edit.set(r.a);
@@ -86,32 +128,6 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
           {errors.length > 0 && <div class="small muted">אפשר לשמור גם אוטומט לא תקין. השגיאות יסומנו שוב בפתיחה הבאה.</div>}
         </section>
 
-        {state && !readOnly && (
-          <section class="card pad stack">
-            <h2>מצב נבחר</h2>
-            <label class="field">שם המצב
-              <input class="input mono" dir="auto" value={state.label} onInput={e => edit.set(x => patchState(x, state.id, { label: (e.target as HTMLInputElement).value }), { coalesce: true })} onBlur={edit.endCoalesce} />
-            </label>
-            <label class="field">מה המצב זוכר?
-              <textarea class="input" value={state.memory ?? ""} placeholder="למשל: האות האחרונה הייתה a"
-                onInput={e => edit.set(x => patchState(x, state.id, { memory: (e.target as HTMLTextAreaElement).value }), { coalesce: true })} onBlur={edit.endCoalesce} />
-            </label>
-            <div class="row">
-              <button type="button" class="btn btn-sm" disabled={a.initialStateId === state.id} onClick={() => edit.set(x => setInitial(x, state.id))}>
-                {a.initialStateId === state.id ? "→ מצב התחלתי" : "סימון כמצב התחלתי"}
-              </button>
-              <button type="button" class="btn btn-sm" aria-pressed={a.acceptingStateIds.includes(state.id)} onClick={() => edit.set(x => toggleAccepting(x, state.id))}>
-                {a.acceptingStateIds.includes(state.id) ? "◎ מקבל (ביטול)" : "סימון כמקבל"}
-              </button>
-              <button type="button" class="btn btn-sm btn-danger" onClick={() => {
-                const warn = state.id === a.initialStateId ? " זה היה המצב ההתחלתי." : a.acceptingStateIds.includes(state.id) ? " זה היה מצב מקבל." : "";
-                edit.set(x => deleteState(x, state.id));
-                toast(`${state.label} נמחק יחד עם המעברים שלו.${warn} אפשר לבטל.`);
-              }}>מחיקה</button>
-            </div>
-          </section>
-        )}
-
         <section class="card pad stack">
           <h2>מקרא: מה כל מצב זוכר</h2>
           {a.states.map(s => (
@@ -135,9 +151,10 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
               highlight={{ errStates, errEdges }}
               onMove={(id, x, y, done) => { edit.set(cur => moveState(cur, id, x, y), { coalesce: true }); if (done) edit.endCoalesce(); }}
               onSelectState={id => { setSel(id); setEdge(null); }}
+              onStateDblClick={id => edit.set(x => toggleAccepting(x, id))}
               onAddState={onAddState}
               onAddEdge={(from, to, at) => { setEdge({ from, to, ...at }); setTool("select"); }}
-              onSelectEdge={(from, to, at) => setEdge({ from, to, ...at })} />
+              onSelectEdge={(from, to, at) => { setSel(null); setEdge({ from, to, ...at }); }} />
             {!readOnly && (
               <div class="canvas-tools">
                 <div class="seg" role="group" aria-label="כלי ציור">
@@ -150,12 +167,34 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
                 <button type="button" class="btn btn-sm" disabled={!edit.canRedo} onClick={edit.redo} aria-label="חזרה" title="חזרה (Ctrl+Y)"><IconRedo /></button>
               </div>
             )}
-            <div class="canvas-hint">
-              {readOnly ? "האוטומט נעול במשימה הזו" : tool === "state" ? "לחצו במקום ריק כדי להוסיף מצב" : tool === "edge" ? "לחצו על מצב המקור ואחר כך על מצב היעד (אותו מצב = לולאה)" : "גררו מצב כדי להזיז · לחיצה כפולה במקום ריק מוסיפה מצב · לחיצה על חץ עורכת אותו"}
+            <div class="canvas-hint" dir="rtl">
+              {readOnly ? "האוטומט נעול במשימה הזו" : tool === "state" ? "לחצו במקום ריק כדי להוסיף מצב" : tool === "edge" ? "לחצו על מצב המקור ואחר כך על מצב היעד (אותו מצב = לולאה)" : sel ? "מקש Delete מוחק את המצב הנבחר · לחיצה כפולה על מצב הופכת אותו למקבל" : "לחיצה על מצב: מקבל, התחלתי, שם, מחיקה · לחיצה על חץ: סמלים ומחיקה · לחיצה כפולה במקום ריק: מצב חדש"}
             </div>
           </div>
+          {state && !readOnly && tool === "select" && !edge && (() => {
+            const at = screenOf(state.x, state.y);
+            if (!at) return null;
+            const acc = a.acceptingStateIds.includes(state.id);
+            const isStart = a.initialStateId === state.id;
+            return (
+              <div class="state-bar" role="toolbar" aria-label={`פעולות על ${state.label}`}
+                style={{ left: `${Math.max(8, Math.min(at.x - 200, at.w - 420))}px`, top: `${Math.max(8, at.y + 40)}px` }}>
+                <input class="input mono" aria-label="שם המצב" value={state.label} style={{ width: "86px", minHeight: "34px", padding: "4px 8px" }}
+                  onInput={e => edit.set(x => patchState(x, state.id, { label: (e.target as HTMLInputElement).value }), { coalesce: true })} onBlur={edit.endCoalesce} />
+                <button type="button" class={`btn btn-sm${acc ? " on" : ""}`} aria-pressed={acc} onClick={() => edit.set(x => toggleAccepting(x, state.id))}
+                  title="מצב מקבל (או לחיצה כפולה על המצב)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="8" cy="8" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+                  {acc ? "מקבל ✓" : "מקבל"}
+                </button>
+                <button type="button" class={`btn btn-sm${isStart ? " on" : ""}`} disabled={isStart} onClick={() => edit.set(x => setInitial(x, state.id))} title="מצב התחלתי">
+                  → {isStart ? "התחלתי ✓" : "התחלתי"}
+                </button>
+                <button type="button" class="btn btn-sm btn-danger" onClick={() => removeState(state.id)} title="מחיקה (Delete)">🗑 מחיקה</button>
+              </div>
+            );
+          })()}
           {edge && !readOnly && <EdgePopover a={a} edge={edge} onClose={() => setEdge(null)}
-            onChange={symbols => edit.set(x => setEdgeSymbols(x, edge.from, edge.to, symbols))} />}
+            onChange={symbols => edit.set(x => setEdgeSymbols(x, edge.from, edge.to, symbols))} onDelete={() => removeEdge(edge.from, edge.to)} />}
         </section>
 
         <section class="card">
@@ -194,7 +233,7 @@ function AlphabetField({ a, disabled, onChange }: { a: Automaton; disabled: bool
   );
 }
 
-function EdgePopover({ a, edge, onChange, onClose }: { a: Automaton; edge: { from: string; to: string; x: number; y: number }; onChange: (s: string[]) => void; onClose: () => void }) {
+function EdgePopover({ a, edge, onChange, onClose, onDelete }: { a: Automaton; edge: { from: string; to: string; x: number; y: number }; onChange: (s: string[]) => void; onClose: () => void; onDelete: () => void }) {
   const on = new Set(a.transitions.filter(t => t.from === edge.from && t.to === edge.to).map(t => t.symbol));
   const label = (id: string) => a.states.find(s => s.id === id)?.label ?? id;
   const extra = [...on].filter(c => !a.alphabet.includes(c));
@@ -213,7 +252,7 @@ function EdgePopover({ a, edge, onChange, onClose }: { a: Automaton; edge: { fro
         {extra.map(c => <button type="button" key={c} class="chip on" style={{ borderColor: "#B93A2B", color: "#8A2A1F" }} title="הסמל אינו באלפבית" onClick={() => toggle(c)}>{c} ✕</button>)}
       </div>
       <div class="row">
-        <button type="button" class="btn btn-sm btn-danger" disabled={on.size === 0} onClick={() => { onChange([]); onClose(); }}>מחיקת החץ</button>
+        <button type="button" class="btn btn-sm btn-danger" disabled={on.size === 0} onClick={onDelete}>🗑 מחיקת החץ</button>
         <button type="button" class="btn btn-sm btn-primary" onClick={onClose}>סיום</button>
       </div>
     </div>

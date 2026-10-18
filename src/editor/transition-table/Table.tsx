@@ -8,6 +8,7 @@ interface Props {
   onSetCell?: (stateId: string, symbol: string, targets: string[]) => void;
   activeCells?: Set<string>; // "stateId\u0000symbol"
   errCells?: Set<string>;
+  addedCells?: Set<string>;
 }
 
 const k = (s: string, c: string) => `${s}\u0000${c}`;
@@ -31,7 +32,7 @@ export function TransitionTable(p: Props) {
                 <th class="rowh">{mark ? `${mark} ` : ""}{s.label}</th>
                 {p.a.alphabet.map(c => {
                   const targets = ix.targets(s.id, c);
-                  const cls = [p.activeCells?.has(k(s.id, c)) && "active", p.errCells?.has(k(s.id, c)) && "err"].filter(Boolean).join(" ");
+                  const cls = [p.activeCells?.has(k(s.id, c)) && "active", p.errCells?.has(k(s.id, c)) && "err", p.addedCells?.has(k(s.id, c)) && "added"].filter(Boolean).join(" ");
                   return (
                     <td key={c} class={cls}>
                       {!p.editable ? (targets.length ? targets.map(t => ix.label(t)).join(",") : "–")

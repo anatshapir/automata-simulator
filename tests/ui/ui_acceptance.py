@@ -16,6 +16,27 @@ def check(ac, ok, detail=""):
     results.append((ac, bool(ok), detail))
     print(("PASS " if ok else "FAIL ") + ac + (f"  ({detail})" if detail else ""))
 
+
+CONTRAST_JS = """(scope) => {
+  const lum = c => { const v = c.map(x => { x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126*v[0] + 0.7152*v[1] + 0.0722*v[2]; };
+  const parse = s => { const m = s.match(/rgba?\\(([^)]+)\\)/); if (!m) return null; const p = m[1].split(',').map(Number); return p.length === 4 ? (p[3] === 0 ? null : p.slice(0,3)) : p; };
+  const bgOf = el => { for (let e = el; e; e = e.parentElement) { const c = parse(getComputedStyle(e).backgroundColor); if (c) return c; } return [255,255,255]; };
+  const bad = [];
+  for (const el of document.querySelectorAll(scope + ' *')) {
+    const hasText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
+    if (!hasText) continue;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height) continue;
+    const cs = getComputedStyle(el);
+    if (cs.visibility === 'hidden' || cs.display === 'none' || el.closest('[disabled], button:disabled, [aria-hidden=true]')) continue;
+    if (parseFloat(cs.opacity) < 1 || el.closest('.btn:disabled')) continue;
+    const fg = parse(el instanceof SVGElement ? cs.fill : cs.color); if (!fg) continue;
+    const bg = bgOf(el instanceof SVGElement ? el.closest('svg') : el);
+    const L1 = lum(fg), L2 = lum(bg); const ratio = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+    if (ratio < 4.5) bad.push((el.getAttribute('class') || el.tagName) + ':' + el.textContent.trim().slice(0, 24) + ' ' + ratio.toFixed(2) + ' ' + (el instanceof SVGElement ? cs.fill : cs.color) + ' on ' + bg);
+  }
+  return bad;
+}"""
+
 async def example(pg, title):
     await pg.click("header >> text=דוגמאות")
     await pg.click(f".examples button:has-text('{title}')")
@@ -113,6 +134,17 @@ async def main():
         row_after_undo = await pg.eval_on_selector_all("table.delta tr", "rows => rows.map(r => [...r.querySelectorAll('select')].map(s => s.options[s.selectedIndex].text).join(' '))")
         check("Editing an arrow: its target can be changed (and undone)", row[-1] == "q0 q0 q0" and row_after_undo[-1] == "q2 q2 q2", f"{row[-1]} / {row_after_undo[-1]}")
 
+        # AC-03: an empty or duplicate state name is refused while typing
+        x, y = await center("q1"); await pg.mouse.click(x, y)
+        await pg.fill(".state-bar input[aria-label='שם המצב']", "q0")
+        warned = await pg.locator(".name-problem").count() == 1
+        still = await pg.eval_on_selector_all(".g-state text", "els => els.map(e => e.textContent)")
+        await pg.fill(".state-bar input[aria-label='שם המצב']", "ראיתי a")
+        renamed = await pg.eval_on_selector_all(".g-state text", "els => els.map(e => e.textContent)")
+        await pg.keyboard.press("Escape")
+        await pg.click("button[aria-label='ביטול']")
+        check("AC-03 duplicate state name refused, valid rename applied", warned and still.count("q0") == 1 and "q1" in still and "ראיתי a" in renamed, f"{still} -> {renamed}")
+
         # AC-33 / AC-13: run locks editing; back restores; changing the word cancels the run
         await pg.click("header >> text=הרצה")
         editable = await pg.locator(".canvas-tools").count() + await pg.locator("table.delta select").count()
@@ -157,6 +189,24 @@ async def main():
         still_run = await pg.locator("input[aria-label='המילה להרצה']").input_value() == "aab"
         check("AC-38 presentation: no side panel/table/tools, names >= 28px, controls work, Esc restores", side == 0 and f >= 28 and stepped and gone and still_run, f"min label {f:.1f}px")
 
+        # AC-26: text contrast at least 4.5:1 on the build and run screens
+        bad_build = await pg.evaluate(CONTRAST_JS, ".app")
+        await pg.click("header >> text=הרצה")
+        await pg.fill("input[aria-label='המילה להרצה']", "aab")
+        await pg.click("button:has-text('צעד קדימה')")
+        bad_run = await pg.evaluate(CONTRAST_JS, ".app")
+        check("AC-26 text contrast at least 4.5:1", not bad_build and not bad_run, f"build {bad_build[:5]} run {bad_run[:5]}")
+        # AC-26: the Hebrew beads tape runs left to right
+        await pg.click("header >> text=בנייה")
+        await example(pg, "חרוזים")
+        await pg.click("header >> text=הרצה")
+        await pg.fill("input[aria-label='המילה להרצה']", "")
+        alpha = await pg.eval_on_selector_all(".symbol-pad .chip", "els => els.map(e => e.textContent)")
+        for c in alpha[:3]: await pg.click(f".symbol-pad .chip:text-is('{c}')")
+        xs = await pg.eval_on_selector_all(".tape .cell", "els => els.map(e => [e.textContent, e.getBoundingClientRect().x])")
+        check("AC-26 Hebrew beads: tape cells left to right in reading order", [t for t, _ in xs] == alpha[:3] and all(xs[i][1] < xs[i+1][1] for i in range(len(xs)-1)), f"{xs}")
+        await pg.click("header >> text=בנייה")
+
         # AC-25: SVG export keeps start arrow, double circle, trap fill
         await pg.click("header >> text=בנייה")
         await example(pg, "תרגיל 14")
@@ -169,6 +219,21 @@ async def main():
             await pg.click("summary:has-text('ייצוא ציור')"); await pg.click(".menu button:has-text('PNG')")
         d2 = await dl2.value
         check("AC-25 PNG export", (await d2.path()) and os.path.getsize(await d2.path()) > 2000)
+
+        # AC-07: completion marks what it added (until the next edit), original kept by undo
+        await example(pg, "מתחילה ב-ab")
+        await pg.click(".side button:has-text('השלמה לאסד״מ')")
+        await pg.click(".side button:has-text('השלמה לאסד״מ (יוצר עותק)')")
+        card = await pg.inner_text(".added-card")
+        n_added_edges = await pg.locator(".g-edge.added").count()
+        n_added_cells = await pg.locator("table.delta td.added").count()
+        trap_marked = await pg.locator(".g-state.added").count() == 1
+        check("AC-07 completion marks the trap and the added transitions", "(q0,b,q3)" in card and "(q1,a,q3)" in card and n_added_edges >= 2 and n_added_cells == 4 and trap_marked,
+              f"edges={n_added_edges} cells={n_added_cells}")
+        await pg.click("button[aria-label='ביטול']")
+        back = await pg.locator(".g-state").count() == 3 and await pg.locator(".added-card").count() == 0
+        check("AC-07 undo returns to the original partial DFA", back)
+        await example(pg, "תרגיל 14")
 
         # AC-24: saving an invalid automaton warns; reload shows the same errors
         await pg.select_option("select[aria-label='δ(q0, a)']", "")

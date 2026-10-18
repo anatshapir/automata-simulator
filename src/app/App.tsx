@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
 import { ALL_TOOLS, type Automaton, emptyAutomaton, TASK_KIND_NAMES, TYPE_NAMES, type Word } from "../model/automaton.js";
 import { errorsOf, validate } from "../validation/validate.js";
-import { completeToFull } from "../analysis/tools.js";
+import { type Completion, completeToFull } from "../analysis/tools.js";
 import { FILE_EXTENSION, parseAutomatonFile, serializeAutomaton } from "../export/file.js";
 import { deleteDraft, type Draft, loadDraft, saveDraft } from "../export/draft.js";
 import { download, exportPng, exportSvg, safeName } from "../export/image.js";
@@ -123,11 +123,15 @@ export function App() {
     setView("run");
   };
 
+  const [completion, setCompletion] = useState<Completion | null>(null);
   const complete = () => {
     const c = completeToFull(a);
     hist.set(c.automaton);
-    toast(`נוצר עותק מלא: נוסף מצב המלכודת ${c.trapLabel} ו-${c.added.length} מעברים אליו. "ביטול" מחזיר למקור.`);
+    setCompletion(c);
+    setView("build");
   };
+  // the marks of what completion added stay until the next edit
+  const added = completion && completion.automaton === a ? completion : null;
 
   const toolsPanel = (
     <>
@@ -196,7 +200,7 @@ export function App() {
 
       {view === "build" && (
         <BuildView edit={{ a, set: hist.set, endCoalesce: hist.endCoalesce, undo: hist.undo, redo: hist.redo, canUndo: hist.canUndo, canRedo: hist.canRedo }}
-          issues={issues} readOnly={student && !!task!.locked} lockTypeAlphabet={student} svgRef={svgRef} tools={toolsPanel} toast={toast} />
+          issues={issues} readOnly={student && !!task!.locked} lockTypeAlphabet={student} svgRef={svgRef} tools={toolsPanel} toast={toast} added={added} onCloseAdded={() => setCompletion(null)} />
       )}
       {view === "run" && runnable && <RunView a={a} rn={rn} svgRef={svgRef} side={toolsPanel} />}
       {view === "task" && teacher && (

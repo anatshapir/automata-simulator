@@ -146,10 +146,10 @@ table.delta select:hover, table.delta input:hover, table.delta select:focus, tab
 /* ---------- run */
 .tape { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; direction: ltr; }
 .cell { min-width: 48px; height: 56px; padding: 0 8px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--line-strong); border-radius: 8px; font-family: var(--mono); font-size: 24px; font-weight: 600; background: #fff; color: var(--ink); }
-.cell.read { background: var(--read); color: #6B7585; border-color: var(--line); }
+.cell.read { background: var(--read); color: #4F596A; border-color: var(--line); }
 .cell.next { border-color: var(--orange); border-width: 3px; }
 .cell.stuck { border-color: var(--red); background: var(--red-soft); color: var(--red-ink); border-width: 3px; }
-.cell.unread { border-style: dashed; color: #6B7585; background: repeating-linear-gradient(135deg, #fff 0 6px, #F1F3F6 6px 12px); }
+.cell.unread { border-style: dashed; color: #4F596A; background: repeating-linear-gradient(135deg, #fff 0 6px, #F1F3F6 6px 12px); }
 .cell-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .cell-eps { font-size: 22px; color: var(--muted); }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; direction: ltr; }
@@ -239,3 +239,11 @@ table.delta select:hover, table.delta input:hover, table.delta select:focus, tab
 .state-bar .btn.on { background: var(--blue-soft); border-color: var(--blue); color: var(--blue-ink); }
 .g-edge:hover path:not(.hit) { stroke: var(--blue); }
 .g-edge:hover text { fill: var(--blue-ink); }
+
+/* what completion added (green = new), until the next edit */
+.g-edge.added path { stroke: var(--green); stroke-width: 2.6; stroke-dasharray: 7 4; }
+.g-edge.added text { fill: var(--green); }
+.g-state.added circle.body { stroke: var(--green); stroke-width: 3.5; }
+table.delta td.added { background: var(--green-soft); outline: 2px dashed var(--green); outline-offset: -2px; }
+.added-card { border-color: #9FD0B5; background: #F3FAF6; }
+.name-problem { position: absolute; top: 100%; right: 0; margin-top: 6px; background: var(--red-ink); color: #fff; font-size: 14px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; z-index: 7; }

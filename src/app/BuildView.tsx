@@ -6,6 +6,7 @@ import { edgeKey } from "../editor/graph/geometry.js";
 import { FormalDefinition, TransitionTable, Triples, tableAsText } from "../editor/transition-table/Table.js";
 import { addState, autoLayout, deleteState, moveEdge, moveState, parseAlphabet, patchState, setAlphabet, setCell, setEdgeSymbols, setInitial, setType, toggleAccepting } from "../editor/ops.js";
 import { IconRedo, IconUndo, LockIcon } from "./icons.js";
+import type { Completion } from "../analysis/tools.js";
 
 export interface EditApi {
   a: Automaton;
@@ -24,9 +25,12 @@ interface Props {
   svgRef: { current: SVGSVGElement | null };
   tools: preact.ComponentChildren;
   toast: (msg: string, err?: boolean) => void;
+  /** what "completion to a full DFA" added, marked until the next edit (spec 4.1) */
+  added?: Completion | null;
+  onCloseAdded?: () => void;
 }
 
-export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, tools, toast }: Props) {
+export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, tools, toast, added, onCloseAdded }: Props) {
   const a = edit.a;
   const [tool, setTool] = useState<CanvasTool>("select");
   const [sel, setSel] = useState<string | null>(null);
@@ -42,6 +46,10 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
     return new Set(a.transitions.filter(t => ids.has(t.id)).map(t => edgeKey(t.from, t.to)));
   }, [issues, a]);
 
+  const addedT = added ? a.transitions.filter(t => t.to === added.trapId) : [];
+  const addedStates = useMemo(() => new Set(added ? [added.trapId] : []), [added]);
+  const addedEdges = useMemo(() => new Set(addedT.map(t => edgeKey(t.from, t.to))), [added, a]);
+  const addedCells = useMemo(() => new Set(addedT.map(t => `${t.from}\u0000${t.symbol}`)), [added, a]);
   const errors = issues.filter(i => i.severity === "error");
   const warnings = issues.filter(i => i.severity === "warning");
   const state = a.states.find(s => s.id === sel) ?? null;
@@ -98,6 +106,15 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
   return (
     <div class="workspace">
       <aside class="side">
+        {added && (
+          <section class="card pad stack added-card" aria-live="polite">
+            <div class="between"><h2 style={{ color: "#1F7A4D" }}>נוצר עותק מלא · מה נוסף</h2>
+              <button type="button" class="btn btn-sm btn-ghost" onClick={onCloseAdded} aria-label="סגירה">✕</button></div>
+            <div>מצב מלכודת חדש <span class="mono ltr" style={{ fontWeight: 600 }}>{added.trapLabel}</span> עם לולאה על כל הסמלים, ו-{added.added.length} מעברים אליו מהתאים שהיו ריקים:</div>
+            <div class="mono ltr" style={{ textAlign: "left", lineHeight: 1.9 }}>{added.added.map(([f, c, t], i) => <span key={i} style={{ marginInlineEnd: "14px", whiteSpace: "nowrap", display: "inline-block" }}>({f},{c},{t})</span>)}</div>
+            <div class="small muted">מסומנים בירוק בציור ובטבלה. המקור לא השתנה: "ביטול" (Ctrl+Z) מחזיר אליו.</div>
+          </section>
+        )}
         <section class="card pad stack">
           <div class="between"><h2>סוג האוטומט</h2>{lockTypeAlphabet && <span class="lock"><LockIcon />נקבע במשימה</span>}</div>
           <div class="opt-grid">
@@ -148,7 +165,7 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
         <section class="card" style={{ position: "relative" }}>
           <div class="canvas" dir="ltr">
             <Graph a={a} editable={!readOnly} tool={tool} svgRef={svgRef} selectedState={sel} selectedEdge={edge ? edgeKey(edge.from, edge.to) : null}
-              highlight={{ errStates, errEdges }}
+              highlight={{ errStates, errEdges, addedStates, addedEdges }}
               onMove={(id, x, y, done) => { edit.set(cur => moveState(cur, id, x, y), { coalesce: true }); if (done) edit.endCoalesce(); }}
               onSelectState={id => { setSel(id); setEdge(null); }}
               onStateDblClick={id => edit.set(x => toggleAccepting(x, id))}
@@ -179,8 +196,7 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
             return (
               <div class="state-bar" role="toolbar" aria-label={`פעולות על ${state.label}`}
                 style={{ left: `${Math.max(8, Math.min(at.x - 200, at.w - 420))}px`, top: `${Math.max(8, at.y + 40)}px` }}>
-                <input class="input mono" aria-label="שם המצב" value={state.label} style={{ width: "86px", minHeight: "34px", padding: "4px 8px" }}
-                  onInput={e => edit.set(x => patchState(x, state.id, { label: (e.target as HTMLInputElement).value }), { coalesce: true })} onBlur={edit.endCoalesce} />
+                <LabelInput key={state.id} a={a} id={state.id} onRename={l => edit.set(x => patchState(x, state.id, { label: l }), { coalesce: true })} onDone={edit.endCoalesce} />
                 <button type="button" class={`btn btn-sm${acc ? " on" : ""}`} aria-pressed={acc} onClick={() => edit.set(x => toggleAccepting(x, state.id))}
                   title="מצב מקבל (או לחיצה כפולה על המצב)">
                   <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6" /><circle cx="8" cy="8" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
@@ -208,7 +224,7 @@ export function BuildView({ edit, issues, readOnly, lockTypeAlphabet, svgRef, to
               navigator.clipboard?.writeText(tableAsText(a)).then(() => toast("הטבלה הועתקה כטקסט"), () => toast("ההעתקה נכשלה", true));
             }}>העתקת הטבלה</button>}
           </div>
-          {tab === "table" && <TransitionTable a={a} editable={!readOnly} errCells={errCells} onSetCell={(s, c, ts) => edit.set(x => setCell(x, s, c, ts))} />}
+          {tab === "table" && <TransitionTable a={a} editable={!readOnly} errCells={errCells} addedCells={addedCells} onSetCell={(s, c, ts) => edit.set(x => setCell(x, s, c, ts))} />}
           {tab === "triples" && <Triples a={a} />}
           {tab === "formal" && <div style={{ padding: "12px 14px" }}><FormalDefinition a={a} /></div>}
         </section>
@@ -273,5 +289,28 @@ function EdgePopover({ a, edge, onChange, onClose, onDelete, onRedirect }: { a: 
         <button type="button" class="btn btn-sm btn-primary" onClick={onClose}>סיום</button>
       </div>
     </div>
+  );
+}
+
+/** State name: an empty or duplicate name is refused while typing (spec 3.2, AC-03); the old name stays. */
+function LabelInput({ a, id, onRename, onDone }: { a: Automaton; id: string; onRename: (l: string) => void; onDone: () => void }) {
+  const current = a.states.find(s => s.id === id)?.label ?? "";
+  const [text, setText] = useState<string | null>(null);
+  const shown = text ?? current;
+  const t = shown.trim();
+  const problem = t === "" ? "לכל מצב צריך שם" : a.states.some(s => s.id !== id && s.label === t) ? `כבר יש מצב בשם ${t}` : null;
+  return (
+    <span style={{ position: "relative", display: "inline-flex" }}>
+      <input class="input mono" aria-label="שם המצב" aria-invalid={!!problem} value={shown} dir="auto"
+        style={{ width: "96px", minHeight: "34px", padding: "4px 8px", ...(problem ? { borderColor: "#B93A2B", background: "#FBE9E6" } : {}) }}
+        onInput={e => {
+          const v = (e.target as HTMLInputElement).value;
+          setText(v);
+          const vt = v.trim();
+          if (vt !== "" && !a.states.some(s => s.id !== id && s.label === vt)) onRename(vt);
+        }}
+        onBlur={() => { setText(null); onDone(); }} />
+      {problem && <span role="alert" class="name-problem">{problem}. השם הקודם נשמר.</span>}
+    </span>
   );
 }

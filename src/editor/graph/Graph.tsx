@@ -13,6 +13,8 @@ export interface Highlight {
   stuck?: string | null;
   errStates?: Set<string>;
   errEdges?: Set<string>;
+  addedStates?: Set<string>; // just added by completion (marked until the next edit)
+  addedEdges?: Set<string>;
 }
 
 interface Props {
@@ -161,7 +163,7 @@ export function Graph(p: Props) {
         const onpath = !active && h.pathEdges?.has(s.key);
         const err = h.errEdges?.has(s.key);
         const sel = p.selectedEdge === s.key;
-        const cls = `g-edge${active ? " active" : ""}${onpath ? " onpath" : ""}${err ? " err" : ""}${sel ? " sel" : ""}`;
+        const cls = `g-edge${active ? " active" : ""}${onpath ? " onpath" : ""}${err ? " err" : ""}${sel ? " sel" : ""}${h.addedEdges?.has(s.key) ? " added" : ""}`;
         const marker = active ? "o" : onpath || sel ? "b" : err ? "r" : "k";
         const click = (e: PointerEvent) => {
           e.stopPropagation();
@@ -181,7 +183,7 @@ export function Graph(p: Props) {
         const stuck = h.stuck === s.id;
         const onpath = !cur && h.pathStates?.has(s.id);
         const cls = ["g-state", traps.has(s.id) && "trap", stuck ? "stuck" : cur ? "cur" : onpath ? "onpath" : "",
-          h.errStates?.has(s.id) && !cur && "err", (p.selectedState === s.id || edgeFrom === s.id) && "sel"].filter(Boolean).join(" ");
+          h.errStates?.has(s.id) && !cur && "err", h.addedStates?.has(s.id) && "added", (p.selectedState === s.id || edgeFrom === s.id) && "sel"].filter(Boolean).join(" ");
         const fs = Math.min(17 * scale, (2 * r - 8) / Math.max(2, [...s.label].length) * 1.75);
         return (
           <g class={cls} key={s.id} data-id={s.id} onPointerDown={e => downState(e as PointerEvent, s.id)}

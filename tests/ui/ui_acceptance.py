@@ -207,6 +207,16 @@ async def main():
         check("AC-26 Hebrew beads: tape cells left to right in reading order", [t for t, _ in xs] == alpha[:3] and all(xs[i][1] < xs[i+1][1] for i in range(len(xs)-1)), f"{xs}")
         await pg.click("header >> text=בנייה")
 
+        # Examples come with the question from the materials and words to try
+        await pg.click("header >> text=בנייה")
+        await example(pg, "שקף 30")
+        q = await pg.inner_text(".example-banner")
+        await pg.click(".example-banner .chip >> nth=0")
+        res = await pg.inner_text(".side") if await pg.locator(".side").count() else ""
+        await pg.click("button:has-text('לסוף')")
+        check("Examples show the source question and words to try", "acb" in q and "bcc" in q and "מילים לנסות" in q and await pg.locator(".result").count() == 1)
+        await pg.click("header >> text=בנייה")
+
         # AC-25: SVG export keeps start arrow, double circle, trap fill
         await pg.click("header >> text=בנייה")
         await example(pg, "תרגיל 14")

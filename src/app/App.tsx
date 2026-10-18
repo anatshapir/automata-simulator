@@ -13,8 +13,10 @@ import { RunView } from "./RunView.js";
 import { TaskEditor } from "./TaskEditor.js";
 import { Present } from "./Present.js";
 import { TestWordsPanel, ToolsPanel } from "./ToolsPanel.js";
-import { EXAMPLES } from "./examples.js";
+import { type Example, EXAMPLES } from "./examples.js";
+import { showWord } from "../engine/word.js";
 import { LockIcon, Logo } from "./icons.js";
+import { Rich } from "./Rich.js";
 
 type View = "build" | "run" | "task";
 type Ask = { title: string; body: string; yes: string; onYes: () => void; no?: string; onNo?: () => void } | null;
@@ -28,6 +30,7 @@ export function App() {
   const [teacher, setTeacher] = useState(false);
   const [present, setPresent] = useState(false);
   const [examples, setExamples] = useState(false);
+  const [example, setExample] = useState<{ ex: Example; hidden: boolean } | null>(null);
   const [ask, setAsk] = useState<Ask>(null);
   const [toastMsg, setToast] = useState<{ text: string; err: boolean } | null>(null);
   const [tried, setTried] = useState<{ accepted: boolean }[]>([]);
@@ -92,8 +95,8 @@ export function App() {
     return () => window.removeEventListener("keydown", k);
   }, [view, present, rn, hist]);
 
-  const replace = (next: Automaton, why: string) => {
-    const go = () => { hist.set(next, { reset: true }); setView("build"); setTried([]); };
+  const replace = (next: Automaton, why: string, ex: Example | null = null) => {
+    const go = () => { hist.set(next, { reset: true }); setView("build"); setTried([]); setExample(ex ? { ex, hidden: false } : null); };
     const pristine = !hist.canUndo && a.states.length <= 1 && a.transitions.length === 0;
     if (pristine) go();
     else setAsk({ title: "להחליף את האוטומט הפתוח?", body: `${why} האוטומט שפתוח עכשיו יוחלף. אם צריך אותו, שמרו אותו קודם לקובץ.`, yes: "החלפה", onYes: go });
@@ -188,7 +191,7 @@ export function App() {
         <section class="banner" aria-label="המשימה">
           <div style={{ flex: "1 1 520px" }}>
             <div class="what">המשימה · {TASK_KIND_NAMES[task!.kind]}</div>
-            <div class="prompt">{task!.prompt || "(המורה לא כתבה ניסוח)"}</div>
+            <div class="prompt">{task!.prompt ? <Rich text={task!.prompt} /> : "(המורה לא כתבה ניסוח)"}</div>
           </div>
           <div class="row">
             <span class="lock"><LockIcon />סוג: {TYPE_NAMES[a.type]}</span>
@@ -196,6 +199,26 @@ export function App() {
             {task!.locked && <span class="lock"><LockIcon />האוטומט נעול לעריכה</span>}
           </div>
         </section>
+      )}
+
+      {example && !example.hidden && example.ex.q && view !== "task" && !student && (
+        <section class="banner example-banner" aria-label="השאלה">
+          <div style={{ flex: "1 1 560px" }} class="stack">
+            <div class="what">השאלה · {example.ex.where}</div>
+            <div class="prompt"><Rich text={example.ex.q.question} /></div>
+            {example.ex.q.ask && <div><Rich text={example.ex.q.ask} /></div>}
+            {example.ex.q.note && <div class="ex-note"><Rich text={example.ex.q.note} /></div>}
+            {example.ex.tryWords.length > 0 && (
+              <div class="row small">מילים לנסות:
+                {example.ex.tryWords.map((w, i) => <button type="button" key={i} class="chip" onClick={() => tryWord(w)}>{showWord(w, a.alphabet)}</button>)}
+              </div>
+            )}
+          </div>
+          <button type="button" class="btn btn-sm btn-ghost" style={{ alignSelf: "flex-start" }} onClick={() => setExample({ ...example, hidden: true })}>הסתרה</button>
+        </section>
+      )}
+      {example?.hidden && example.ex.q && !student && view !== "task" && (
+        <div style={{ margin: "10px 20px 0" }}><button type="button" class="btn btn-sm" onClick={() => setExample({ ...example, hidden: false })}>הצגת השאלה</button></div>
       )}
 
       {view === "build" && (
@@ -208,7 +231,7 @@ export function App() {
           onPreview={() => { if (!a.task) hist.set(x => ({ ...x, task: { prompt: "", kind: "build", tools: ["T-1", "T-2", "T-3", "T-9"], locked: false } })); setTeacher(false); setView("build"); }} />
       )}
 
-      {present && <Present a={a} rn={rn} running={view === "run"} onExit={() => setPresent(false)} />}
+      {present && <Present a={a} rn={rn} running={view === "run"} question={example?.ex.q?.question ?? null} onExit={() => setPresent(false)} />}
 
       {!decided && draft && (
         <div class="overlay">
@@ -231,9 +254,12 @@ export function App() {
             <div class="small muted">כל הדוגמאות נבדקו מול החומרים ומול הגדרת השפה.</div>
             <div class="examples">
               {EXAMPLES.map(ex => (
-                <button type="button" key={ex.id} onClick={() => { setExamples(false); replace(structuredClone(ex.automaton), `פתיחת הדוגמה "${ex.title}".`); }}>
-                  <span>{ex.title}{ex.defect && <span style={{ color: "#B93A2B" }}> · שגיאה במקור (להדגמה)</span>}</span>
-                  <span class="small muted">{ex.where}</span>
+                <button type="button" key={ex.id} onClick={() => { setExamples(false); replace(structuredClone(ex.automaton), `פתיחת הדוגמה "${ex.title}".`, ex); }}>
+                  <span class="stack" style={{ gap: "2px", textAlign: "right" }}>
+                    <span style={{ fontWeight: 600 }}>{ex.title}{ex.defect && <span style={{ color: "#B93A2B" }}> · שגיאה במקור (להדגמה)</span>}</span>
+                    {ex.q && <span class="small muted"><Rich text={ex.q.question} /></span>}
+                  </span>
+                  <span class="small muted" style={{ flex: "none", maxWidth: "34%" }}>{ex.where}</span>
                 </button>
               ))}
             </div>

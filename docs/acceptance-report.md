@@ -1,7 +1,7 @@
 # דוח קבלה · סימולטור אוטומטים, גרסה 1
 
-- **תאריך:** 2026-10-18 13:26 (IDT)
-- **גרסת קוד:** `362abb1`
+- **תאריך:** 2026-10-18 13:59 (IDT)
+- **גרסת קוד:** `f28141e` (עם שינויים שלא נשמרו)
 - **סיכום:** כל 38 תנאי הקבלה עוברים
 
 ## הפקודות והפלט
@@ -9,9 +9,9 @@
 | פקודה | תוצאה |
 |---|---|
 | `npx tsc --noEmit` | עבר |
-| `npx vitest run` | 232/232 בדיקות עברו |
+| `npx vitest run` | 234/234 בדיקות עברו |
 | `npx vite build` | עבר |
-| `python3 tests/ui/ui_acceptance.py` (Chromium, 1366×768) | 28/28 בדיקות עברו |
+| `python3 tests/ui/ui_acceptance.py` (Chromium, 1366×768) | 29/29 בדיקות עברו |
 
 ## תנאי הקבלה
 
@@ -74,6 +74,7 @@ PASS AC-26 all text at least 14px (build screen)  (min 14.0px at BUTTON:חדש)
 PASS AC-38 presentation: no side panel/table/tools, names >= 28px, controls work, Esc restores  (min label 30.0px)
 PASS AC-26 text contrast at least 4.5:1  (build [] run [])
 PASS AC-26 Hebrew beads: tape cells left to right in reading order  ([['כ', 37], ['א', 93], ['ב', 149]])
+PASS Examples show the source question and words to try
 PASS AC-25 SVG export keeps start, accepting and trap marks
 PASS AC-25 PNG export
 PASS AC-07 completion marks the trap and the added transitions  (edges=3 cells=4)

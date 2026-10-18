@@ -5,12 +5,13 @@ import { formatSet } from "../engine/word.js";
 import { Controls, progressText, runHighlight, Tape } from "./RunParts.js";
 import type { Runner } from "./runner.js";
 import { Index } from "../model/automaton.js";
+import { Rich } from "./Rich.js";
 
 /**
  * Presentation mode (spec 8): side panel, table and tools hidden; drawing and tape enlarged; run controls kept.
  * No answers on the side, so the class can be asked. Esc leaves.
  */
-export function Present({ a, rn, running, onExit }: { a: Automaton; rn: Runner; running: boolean; onExit: () => void }) {
+export function Present({ a, rn, running, question, onExit }: { a: Automaton; rn: Runner; running: boolean; question: string | null; onExit: () => void }) {
   useEffect(() => {
     const k = (e: KeyboardEvent) => { if (e.key === "Escape") onExit(); };
     window.addEventListener("keydown", k);
@@ -22,8 +23,10 @@ export function Present({ a, rn, running, onExit }: { a: Automaton; rn: Runner; 
   return (
     <div class="present" role="dialog" aria-label="מצב הצגה">
       <header>
-        <div class="t">{a.title || "אוטומט"}</div>
-        <div class="s">{TYPE_NAMES[a.type]} · <span class="mono ltr">Σ = {formatSet(a.alphabet)}</span></div>
+        <div class="stack" style={{ gap: "2px", minWidth: 0, flex: "1 1 auto" }}>
+          <div class="t">{question ? <Rich text={question} /> : (a.title || "אוטומט")}</div>
+          <div class="s">{TYPE_NAMES[a.type]} · <span class="mono ltr">Σ = {formatSet(a.alphabet)}</span></div>
+        </div>
         <div class="spacer" />
         <button type="button" class="btn" onClick={onExit} style={{ fontSize: "18px", minHeight: "50px" }}>יציאה ממצב הצגה <span class="mono small muted">Esc</span></button>
       </header>

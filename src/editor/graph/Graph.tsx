@@ -55,19 +55,20 @@ export function Graph(p: Props) {
   if (p.minScreenFont && px) {
     // the drawing's padding grows with the scale, so settle the scale in a few rounds
     for (let i = 0; i < 4; i++) {
-      const b0 = bounds(p.a, 80 * Math.min(scale, 1.3));
+      const b0 = bounds(p.a, 80 * Math.max(1, Math.min(scale, 1.6, minGap(p.a) * 0.4 / R)));
       const ratio = Math.min(px.w / b0.w, px.h / b0.h);
       scale = Math.max(p.scale ?? 1, Math.min(3.2, p.minScreenFont / 17 / ratio));
     }
   }
-  const gs = Math.min(scale, 1.6); // geometry grows less than text, so states do not collide
+  // geometry grows less than text, and never so much that neighbouring states touch
+  const gs = Math.max(1, Math.min(scale, 1.6, minGap(p.a) * 0.4 / R));
   const r = R * gs;
   const drag = useRef<{ id: string; dx: number; dy: number; moved: boolean } | null>(null);
   const [frozen, setFrozen] = useState<ReturnType<typeof bounds> | null>(null);
   const [edgeFrom, setEdgeFrom] = useState<string | null>(null);
   const [hover, setHover] = useState<{ x: number; y: number } | null>(null);
 
-  const box = frozen ?? bounds(p.a, 80 * Math.min(scale, 1.3));
+  const box = frozen ?? bounds(p.a, 80 * gs);
   const shapes = useMemo(() => edgeShapes(p.a, gs), [p.a, gs]);
   const traps = useMemo(() => new Set(trapLikeStates(p.a)), [p.a]);
   const accepting = new Set(p.a.acceptingStateIds);
@@ -173,7 +174,7 @@ export function Graph(p: Props) {
           <g class={cls} key={s.key}>
             <path d={s.d} marker-end={`url(#${uid}-${marker})`} />
             <path class="hit" d={s.d} onPointerDown={click} />
-            <text x={s.lx} y={s.ly} text-anchor="middle" direction="ltr" onPointerDown={click} font-size={`${16 * scale}px`} style={{ cursor: p.editable ? "pointer" : "default", fontSize: `${(p.minScreenFont ? 17 : 16) * scale}px` }}>{s.symbols.join(",")}</text>
+            <text x={s.lx} y={s.ly} text-anchor="middle" direction="ltr" onPointerDown={click}  style={{ cursor: p.editable ? "pointer" : "default", fontSize: `${Math.min((p.minScreenFont ? 17 : 16) * scale, 17 * gs * 1.45)}px` }}>{s.symbols.join(",")}</text>
           </g>
         );
       })}
@@ -202,3 +203,13 @@ export function Graph(p: Props) {
 }
 
 export { edgeKey };
+
+/** smallest distance between two state centres (for how far circles may grow) */
+function minGap(a: Automaton): number {
+  let m = Infinity;
+  for (let i = 0; i < a.states.length; i++) for (let j = i + 1; j < a.states.length; j++) {
+    const s = a.states[i]!, t = a.states[j]!;
+    m = Math.min(m, Math.hypot(s.x - t.x, s.y - t.y));
+  }
+  return m === Infinity ? 1000 : m;
+}

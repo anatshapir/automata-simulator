@@ -247,3 +247,11 @@ table.delta select:hover, table.delta input:hover, table.delta select:focus, tab
 table.delta td.added { background: var(--green-soft); outline: 2px dashed var(--green); outline-offset: -2px; }
 .added-card { border-color: #9FD0B5; background: #F3FAF6; }
 .name-problem { position: absolute; top: 100%; right: 0; margin-top: 6px; background: var(--red-ink); color: #fff; font-size: 14px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; z-index: 7; }
+
+/* the question behind an example */
+.example-banner { background: #FFFFFF; border-color: var(--line); }
+.example-banner .prompt { font-size: 18px; font-weight: 500; }
+.ex-note { background: var(--warn-soft); border: 1px solid #F3D3A6; border-radius: 8px; padding: 6px 10px; color: var(--warn-ink); }
+.examples button { align-items: flex-start; }
+.present header .t { white-space: normal; font-size: 24px; line-height: 1.35; }
+.formal-run { unicode-bidi: isolate; direction: ltr; }

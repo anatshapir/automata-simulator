@@ -34,6 +34,8 @@ npm run build && npx vite preview --port 4173 &
 python3 tests/ui/ui_acceptance.py http://127.0.0.1:4173/
 ```
 
+דוח קבלה מלא (כל 38 התנאים, עם פקודות, תוצאות ותאריך): [`docs/acceptance-report.md`](docs/acceptance-report.md). נוצר מחדש עם `python3 tools/acceptance_report.py`.
+
 ## מבנה
 
 | תיקייה | תוכן |
